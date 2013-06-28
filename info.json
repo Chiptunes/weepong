@@ -1,0 +1,61 @@
+
+{
+
+    "name"    : "P0NG",
+    "version" : "1.0",
+    "state"   : "beta",
+
+    "developer" : "Rodrigo Rojo de la Torre",
+    "authKey"   : "wz",
+
+    "language" : {
+
+        "default" : "en-en",
+        "list"    : [ "en-en" ]
+
+    },
+
+    "common" : {
+
+        "css"    : ["style.css"],
+        "script" : ["script.js"]
+
+    },
+
+    "primary" : "main",
+
+    "window" : {
+
+        "main" : {
+
+            "description" : "",
+            
+            "template" : "main.html",
+
+            "maxizable" : true,
+            "resizable" : false,
+
+            "width"  : {
+
+                "default" : 865,
+                "min"     : 0,
+                "max"     : 0
+
+            },
+
+            "height" : {
+
+                "default" : 550,
+                "min"     : 0,
+                "max"     : 0
+
+            },
+
+            "css"    : [],
+            "script" : []
+
+        }
+
+    }
+
+}

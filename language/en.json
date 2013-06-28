@@ -1,0 +1,18 @@
+{
+	
+	"onePlayer"    		: "1 PLAYER START",
+	"twoPlayers"   		: "2 PLAYER START",
+	"win"				: "YOU WIN!",
+	"lose"				: "YOU LOSE",
+	"practice" 	   		: "PRACTICE",
+	"instructions" 		: "INSTRUCTIONS",
+	"classic"      		: "CLASSIC MODE",
+	"awesome"        	: "AWESOME MODE",
+	"easy" 		   		: "EASY",
+	"medium" 	   		: "MEDIUM",
+	"hard" 		   		: "HARD",
+	"impossible"   		: "FUCKING IMPOSSIBLE",
+	"pause" 	      	: "PAUSE",
+	"instructionsImage" : "https://static.weezeel.com/app/36/instructions.png"
+
+}
