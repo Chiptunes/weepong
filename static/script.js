@@ -1335,25 +1335,23 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     Evento.prototype.colision = function(pelota) {
 
-        var x, y;
-
         if (((pelota.pos.x > this.x) && (pelota.pos.x > (this.x + this.lado))) || ((pelota.pos.x + pelota.lado) > this.x) && ((pelota.pos.x + pelota.lado) < (this.x + this.lado))) {
-            x = true;
-        }
-        
-        if (((pelota.pos.y > this.y) && (pelota.pos.y < (this.y + this.lado))) && (((pelota.pos.y + pelota.lado) > this.y) && ((pelota.pos.y + pelota.lado) < (this.y + this.lado)))) {
-            y = true;
-        }
+            
+            if (((pelota.pos.y > this.y) && (pelota.pos.y < (this.y + this.lado))) || (((pelota.pos.y + pelota.lado) > this.y) && ((pelota.pos.y + pelota.lado) < (this.y + this.lado)))) {
+            
+                return true;
+                pelota.pong.palas[0].alto = canvasZone.height/5;
+                pelota.pong.palas[1].alto = canvasZone.height/5;
+                pelota.lado = canvasZone.width/35; 
+                clearInterval(properties.killid);
+            
+            }
 
-        if (x === true && y === true) {
-        
-            return true
-            pelota.pong.palas[0].alto = canvasZone.height/5;
-            pelota.pong.palas[1].alto = canvasZone.height/5;
-            pelota.lado = canvasZone.width/35; 
-            clearInterval(properties.killid);
+            return false;
 
         }
+
+        return false;
 
     };
 
@@ -1370,16 +1368,39 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     }
 
     Barrera.prototype.colision = function(pelota) {
-            
-        var mitad = pelota.lado/2
 
-        if ( ((pelota.pos.x + pelota.lado) > (this.x + this.ancho)) || ((pelota.pos.x) < (this.x + this.ancho)) ) {
+        if (((pelota.pos.x + pelota.lado) >= this.x) && ((pelota.pos.x + pelota.lado) < (this.x + parseInt(this.ancho * 0.2)))) {
             
-            if (pelota.pos.y + mitad < this.y - this.alto/2)  return false;
-            if (pelota.pos.y - mitad > this.y + this.alto/2)  return false;
+            if (((pelota.pos.y >= this.y) && (pelota.pos.y <= (this.y + this.alto))) || (((pelota.pos.y + pelota.lado) >= this.y) && (pelota.pos.y + pelota.lado) <= (this.y + this.alto))) {
 
-            return true;
-        
+                if (((this.y + this.alto) < pelota.pos.y) && (pelota.pos.y < (this.y + this.ancho + 5)) || (this.y - 5 < (pelota.pos.y + pelota.pos.lado)) && ((pelota.pos.y + pelota.pos.lado) < this.y)) {
+                    pelota.vector.y *= -1;
+                }
+
+                pelota.pos.x = this.x - pelota.lado - 2;
+                return true;
+            
+            }
+
+            return false;
+
+        }
+
+        if ((pelota.pos.x <= (this.x + this.ancho)) && (pelota.pos.x > ((this.x + this.ancho) - parseInt(this.ancho * 0.2)))) {
+
+            if (((pelota.pos.y >= this.y) && (pelota.pos.y <= (this.y + this.alto))) || (((pelota.pos.y + pelota.lado) >= this.y) && (pelota.pos.y + pelota.lado) <= (this.y + this.alto))) {
+
+                if (((this.y + this.alto) < pelota.pos.y) && (pelota.pos.y < (this.y + this.ancho + 5)) || (this.y - 5 < (pelota.pos.y + pelota.pos.lado)) && ((pelota.pos.y + pelota.pos.lado) < this.y)) {
+                    pelota.vector.y *= -1;
+                }
+
+                pelota.pos.x = this.x + this.ancho + 2;
+                return true;
+            
+            }
+
+            return false;
+
         }
 
         return false;
@@ -1387,6 +1408,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     }
 
     Barrera.prototype.dibujar = function(ctx) {
+        
         ctx.fillStyle = "#999";
         ctx.fillRect(this.x, this.y, this.ancho, this.alto);
     
