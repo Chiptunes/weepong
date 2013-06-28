@@ -4,7 +4,7 @@ weePong
 Pong remake for the web OS weeZeel maded with HTML5, canvas, and weeZeel API.
 
 
-Includes:
+Includes
 =========
 
 - Single player with different levels.
@@ -13,7 +13,7 @@ Includes:
 
 - Practice mode with counter.
 
-Future:
+Future
 =======
 
--When weeZeel API will be ready, weePong will include an online mode to play with your friends.
+- When weeZeel API will be ready, weePong will include an online mode to play with your friends.
