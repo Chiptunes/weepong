@@ -1047,7 +1047,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
             //self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
-            self.tipo = 5;
+            self.tipo = 6;
             self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
             
             self.draw = true;
@@ -1345,7 +1345,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             y = true;
         }
 
-        if (x = true && y = true) {
+        if (x === true && y === true) {
         
             return true
             pelota.pong.palas[0].alto = canvasZone.height/5;
