@@ -13,4 +13,4 @@ Includes
 
 [x] Practice mode with counter.
 
-[] When weeZeel API will be ready, weePong will include an online mode to play with your friends.
+[ ] When weeZeel API will be ready, weePong will include an online mode to play with your friends.
