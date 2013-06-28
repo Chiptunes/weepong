@@ -1202,6 +1202,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                         pelota.vector.y *= -1
                     }
 
+                    pelota.vector.y *= -1
+
                 }, 700);
 
                 setTimeout(function() {
@@ -1333,18 +1335,25 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     Evento.prototype.colision = function(pelota) {
 
-        var mitad = pelota.lado/2;
+        var x, y;
 
-        if (pelota.pos.x + mitad < this.x - this.lado/2) return false;
-        if (pelota.pos.y + mitad < this.y - this.lado/2)  return false;
-        if (pelota.pos.x - mitad > this.x + this.lado/2) return false;
-        if (pelota.pos.y - mitad > this.y + this.lado/2)  return false;
+        if (((pelota.pos.x > this.x) && (pelota.pos.x > (this.x + this.lado))) || ((pelota.pos.x + pelota.lado) > this.x) && ((pelota.pos.x + pelota.lado) < (this.x + this.lado))) {
+            x = true;
+        }
         
-        return true
-        pelota.pong.palas[0].alto = canvasZone.height/5;
-        pelota.pong.palas[1].alto = canvasZone.height/5;
-        pelota.lado = canvasZone.width/35; 
-        clearInterval(properties.killid);
+        if (((pelota.pos.y > this.y) && (pelota.pos.y < (this.y + this.lado))) && (((pelota.pos.y + pelota.lado) > this.y) && ((pelota.pos.y + pelota.lado) < (this.y + this.lado)))) {
+            y = true;
+        }
+
+        if (x = true && y = true) {
+        
+            return true
+            pelota.pong.palas[0].alto = canvasZone.height/5;
+            pelota.pong.palas[1].alto = canvasZone.height/5;
+            pelota.lado = canvasZone.width/35; 
+            clearInterval(properties.killid);
+
+        }
 
     };
 
