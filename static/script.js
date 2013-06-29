@@ -1046,8 +1046,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             self.x = parseInt(Math.random() * ((canvasZone.width  * 0.75) - (canvasZone.width  * 0.25) + 1), 10) + (canvasZone.width  * 0.25);
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
-            //self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
             self.tipo = 6;
+            //self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
             self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
             
             self.draw = true;
@@ -1360,6 +1360,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     #######################################################################################################*/
 
     function Barrera(x, y) {
+        
         this.x = x;
         this.y = y;
         this.ancho = canvasZone.width  / 35;
@@ -1369,41 +1370,17 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     Barrera.prototype.colision = function(pelota) {
 
-        if (((pelota.pos.x + pelota.lado) >= this.x) && ((pelota.pos.x + pelota.lado) < (this.x + parseInt(this.ancho * 0.2)))) {
-            
-            if (((pelota.pos.y >= this.y) && (pelota.pos.y <= (this.y + this.alto))) || (((pelota.pos.y + pelota.lado) >= this.y) && (pelota.pos.y + pelota.lado) <= (this.y + this.alto))) {
-
-                if (((this.y + this.alto) < pelota.pos.y) && (pelota.pos.y < (this.y + this.ancho + 5)) || (this.y - 5 < (pelota.pos.y + pelota.pos.lado)) && ((pelota.pos.y + pelota.pos.lado) < this.y)) {
-                    pelota.vector.y *= -1;
-                }
-
-                pelota.pos.x = this.x - pelota.lado - 2;
-                return true;
-            
-            }
-
+        if (pelota.pos.y + pelota.lado < this.y) {
             return false;
-
-        }
-
-        if ((pelota.pos.x <= (this.x + this.ancho)) && (pelota.pos.x > ((this.x + this.ancho) - parseInt(this.ancho * 0.2)))) {
-
-            if (((pelota.pos.y >= this.y) && (pelota.pos.y <= (this.y + this.alto))) || (((pelota.pos.y + pelota.lado) >= this.y) && (pelota.pos.y + pelota.lado) <= (this.y + this.alto))) {
-
-                if (((this.y + this.alto) < pelota.pos.y) && (pelota.pos.y < (this.y + this.ancho + 5)) || (this.y - 5 < (pelota.pos.y + pelota.pos.lado)) && ((pelota.pos.y + pelota.pos.lado) < this.y)) {
-                    pelota.vector.y *= -1;
-                }
-
-                pelota.pos.x = this.x + this.ancho + 2;
-                return true;
-            
-            }
-
+        } else if (pelota.pos.y > this.alto + this.y) {
             return false;
-
+        } else if (pelota.pos.x + pelota.lado < this.x) {
+            return false;
+        } else if (pelota.pos.x > this.x + this.ancho) {
+            return false;
+        } else {
+            return true;
         }
-
-        return false;
 
     }
 
