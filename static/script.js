@@ -1014,7 +1014,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         return Direccion.QUIETO;
 
-    };
+    }
 
     /*#####################################################################################################
     ####################################       CLASE EVENTO       #########################################
@@ -1025,7 +1025,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         
         this.x     = null;
         this.y     = null;
-        this.lado  = canvasZone.width / 5;
+        this.lado  = canvasZone.width / 20;
 
         this.draw = false;
         this.killInit;
@@ -1035,7 +1035,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.types  = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
         this.afectado;
         this.tipo;
-    };
+    
+    }
 
     Evento.prototype.init = function() {
         var self = this;
@@ -1046,8 +1047,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             self.x = parseInt(Math.random() * ((canvasZone.width  * 0.75) - (canvasZone.width  * 0.25) + 1), 10) + (canvasZone.width  * 0.25);
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
-            self.tipo = 6;
-            //self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
+            self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
             self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
             
             self.draw = true;
@@ -1062,7 +1062,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         }, 20000);
 
-    };
+    }
 
     Evento.prototype.dibujar = function(ctx) {
 
@@ -1076,7 +1076,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         ctx.fillRect(this.x, this.y, this.lado, this.lado);
     
-    };
+    }
 
     Evento.prototype.givePower = function(pelota, palas, ctx, pong) {
         
@@ -1331,29 +1331,29 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         }   
     
-    };
+    }
 
     Evento.prototype.colision = function(pelota) {
 
-        if (((pelota.pos.x > this.x) && (pelota.pos.x > (this.x + this.lado))) || ((pelota.pos.x + pelota.lado) > this.x) && ((pelota.pos.x + pelota.lado) < (this.x + this.lado))) {
-            
-            if (((pelota.pos.y > this.y) && (pelota.pos.y < (this.y + this.lado))) || (((pelota.pos.y + pelota.lado) > this.y) && ((pelota.pos.y + pelota.lado) < (this.y + this.lado)))) {
-            
-                return true;
-                pelota.pong.palas[0].alto = canvasZone.height/5;
-                pelota.pong.palas[1].alto = canvasZone.height/5;
-                pelota.lado = canvasZone.width/35; 
-                clearInterval(properties.killid);
-            
-            }
-
+        if (pelota.pos.y + pelota.lado < this.y) {
             return false;
+        } else if (pelota.pos.y > this.y + this.lado) {
+            return false;
+        } else if (pelota.pos.x + pelota.lado < this.x) {
+            return false;
+        } else if (pelota.pos.x > this.x + this.lado) {
+            return false; 
+        } else {
+
+            pelota.pong.palas[0].alto = canvasZone.height/5;
+            pelota.pong.palas[1].alto = canvasZone.height/5;
+            pelota.lado = canvasZone.width/35; 
+            clearInterval(properties.killid);
+            return true;
 
         }
 
-        return false;
-
-    };
+    }
 
     /*#####################################################################################################
     ###################################       CLASE BARRERAS        #######################################
