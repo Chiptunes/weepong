@@ -15,7 +15,7 @@ Includes
 
 [ ] When weeZeel API will be ready, weePong will include an online mode to play with your friends.
 
-Power ups:
+Power-Ups:
 ==========
 
 - Bigger paddle to player 1 | player 2 | both.
