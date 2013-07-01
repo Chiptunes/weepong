@@ -87,12 +87,13 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     function Propiedades () {
         
-        this.paused     = false;
-        this.menu       = true;
-        this.init       = false;
-        this.players    = 0;
-        this.sound      = true;
-        this.select     = 0;
+        this.paused           = false;
+        this.menu             = true;
+        this.init             = false;
+        this.players          = 0;
+        this.sound            = true;
+        this.select           = 0;
+        this.colorDefault     = '#FFF'
         this.rafid;
         this.difficult;
         this.killid;
@@ -290,7 +291,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.puntuaciones = [0, 0];
         this.colisiones = 0;
         this.tiempoTranscurrido = Date.now();
-        this.lineaColor = "#FFF";
+        this.lineaColor = properties.colorDefault;
         this.mode;
         this.tipo = t;
         
@@ -597,7 +598,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.alto  = canvasZone.height / l;
         this.pos = new Vector2D(x, canvasZone.height/2);
         this.velocidad = v;
-        this.color =  "#FFF";
+        this.color = properties.colorDefault;
     
     }
 
@@ -640,7 +641,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.pos;
         this.pong = pong;
 
-        this.color = "#FFF";
+        this.color = properties.colorDefault;
         this.lado = canvasZone.width / 35;
         this.velocidad = 300;
         this.velocidadIni = 300;
@@ -653,6 +654,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     }
 
     Pelota.prototype.incrementarVelocidad = function() {
+        
         this.velocidad += this.incrementoVelocidad;
         this.vector    =  this.vector.normalizar().escalar( this.velocidad );
     
@@ -1935,6 +1937,54 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 keys1.pop();
             }
 
+        })
+
+        .key(' ctrl + g ', function(){
+            
+            if (properties.colorDefault == '#FFF') {
+                
+                for (var i = 0; i < properties.menus.main.length; i++) {
+                    properties.menus.main[i].css('color', '#00FF00');
+                }
+
+                for (var i = 0; i < properties.menus.single.length; i++) {
+                    properties.menus.single[i].css('color', '#00FF00');
+                }
+
+                for (var i = 0; i < properties.menus.doble.length; i++) {
+                    properties.menus.doble[i].css('color', '#00FF00');
+                }
+
+                $('.weepong-win', win).css('color', '#00FF00');
+                $('.weepong-lose', win).css('color', '#00FF00');
+                pauseText.css('color', '#00FF00');
+                scoreFirst.css('color', '#00FF00');
+                scoreSecond.css('color', '#00FF00');
+                properties.colorDefault = '#00FF00';
+
+            } else if (properties.colorDefault == '#00FF00') {
+
+                for (var i = 0; i < properties.menus.main.length; i++) {
+                    properties.menus.main[i].css('color', '#FFF');
+                }
+
+                for (var i = 0; i < properties.menus.single.length; i++) {
+                    properties.menus.single[i].css('color', '#FFF');
+                }
+
+                for (var i = 0; i < properties.menus.doble.length; i++) {
+                    properties.menus.doble[i].css('color', '#FFF');
+                }
+
+                $('.weepong-win', win).css('color', '#FFF');
+                $('.weepong-lose', win).css('color', '#FFF');
+                pauseText.css('color', '#FFF');
+                scoreFirst.css('color', '#FFF');
+                scoreSecond.css('color', '#FFF');
+                properties.colorDefault = '#FFF';
+
+            }
+
         });
 
     pantallas.weepongSelection.mouseover(function() {
@@ -1990,6 +2040,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         properties.menus.doble[properties.select].attr('id', 'selected');
 
-    })
+    });
         
 });
