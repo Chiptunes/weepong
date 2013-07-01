@@ -54,12 +54,6 @@
 	position: absolute;
 }
 
-/*.weepong-canvas{
-	width: 865px;
-	height: 520px;
-	display: none;
-}*/
-
 .weepong-menu{
 	width: 865px;
 	float: left;
@@ -78,10 +72,6 @@
 	font-size: 25px;
 	display: inline-block;
 }
-
-.weepong-container span:hover { 
-	border: 1px solid #FFF;
-} 
 
 .weepong-selection {
 	height: 324px;

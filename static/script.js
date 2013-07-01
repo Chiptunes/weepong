@@ -1912,23 +1912,29 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         .key('w', function(){
 
             keys1.unshift('up');
+
         }, null, function(){
+            
             if(keys1.length > 0 && keys1[0] === 'up') {
                 keys1.shift();
             } else if(keys1.length > 0 && keys1[1] === 'up') {
                 keys1.pop();
             }
+
         })
 
         .key('s', function(){
 
             keys1.unshift('down');
+
         }, null, function(){
+            
             if(keys1.length > 0 && keys1[0] === 'down') {
                 keys1.shift();
             } else if(keys1.length > 0 && keys1[1] === 'down') {
                 keys1.pop();
             }
+
         });
 
     pantallas.weepongSelection.mouseover(function() {
@@ -1936,6 +1942,11 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         for(var i = 0; i < properties.menus.main.length; i++) {
             properties.menus.main[i].attr('id', '');
         }
+
+        properties.menus.main[0].mouseover(function() { properties.select = 0; properties.menus.main[properties.select].attr('id', 'selected'); });
+        properties.menus.main[1].mouseover(function() { properties.select = 1; properties.menus.main[properties.select].attr('id', 'selected'); });
+        properties.menus.main[2].mouseover(function() { properties.select = 2; properties.menus.main[properties.select].attr('id', 'selected'); });
+        properties.menus.main[3].mouseover(function() { properties.select = 3; properties.menus.main[properties.select].attr('id', 'selected'); });
 
     });
 
@@ -1951,6 +1962,11 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             properties.menus.single[i].attr('id', '');
         }
 
+        properties.menus.single[0].mouseover(function() { properties.select = 0; properties.menus.single[properties.select].attr('id', 'selected'); });
+        properties.menus.single[1].mouseover(function() { properties.select = 1; properties.menus.single[properties.select].attr('id', 'selected'); });
+        properties.menus.single[2].mouseover(function() { properties.select = 2; properties.menus.single[properties.select].attr('id', 'selected'); });
+        properties.menus.single[3].mouseover(function() { properties.select = 3; properties.menus.single[properties.select].attr('id', 'selected'); });
+
     });
 
     pantallas.weepongDifficult.mouseout(function(){
@@ -1964,6 +1980,9 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         for(var i = 0; i < properties.menus.doble.length; i++) {
             properties.menus.doble[i].attr('id', '');
         }
+
+        properties.menus.doble[0].mouseover(function() { properties.select = 0; properties.menus.doble[properties.select].attr('id', 'selected'); })
+        properties.menus.doble[1].mouseover(function() { properties.select = 1; properties.menus.doble[properties.select].attr('id', 'selected'); })
 
     });
 
