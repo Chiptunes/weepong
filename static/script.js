@@ -93,7 +93,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.players          = 0;
         this.sound            = true;
         this.select           = 0;
-        this.colorDefault     = '#FFF'
+        this.colorDefault     = '#FFF';
         this.rafid;
         this.difficult;
         this.killid;
@@ -264,6 +264,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     Transiciones.prototype.toInstructions = function() {
 
+        pantallas.weepongDifficult.css('display', 'none');
+        pantallas.weepongType.css('display', 'none');
         pantallas.weepongSelection.css('display', 'none');
         $('.weepong-title').css('display', 'none');
         pantallas.weepongInstructions.css('display', 'block');
@@ -335,17 +337,18 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         scoreSecond.html(0);
 
         cancelRequestAnimFrame(properties.rafid);
-        scoreFirst.css('display', 'none');
-        scoreSecond.css('display', 'none');
-        $('#sound').css('display', 'block');
-        $('.weepong-lose').css('display', 'none');
-        $('.weepong-win').css('display', 'none');
-        $('.weepong-title').css('display', 'block');
+
         pauseText.css('display', 'none');
         pantallas.weepongDifficult.css('display', 'none');
         pantallas.weepongType.css('display', 'none');
         pantallas.weepongInstructions.css('display', 'none');
+        scoreFirst.css('display', 'none');
+        scoreSecond.css('display', 'none');
+        $('.weepong-lose').css('display', 'none');
+        $('.weepong-win').css('display', 'none');
         pantallas.weepongSelection.css('display', 'block');
+        $('#sound').css('display', 'block');
+        $('.weepong-title').css('display', 'block');
         properties.menu = true;
 
     }
@@ -461,25 +464,39 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             this.tiempoTranscurrido = Date.now();
                 
                 if (keys1.length <= 0) {
+                    
                     directions.player1 = Direccion.QUIETO;
+
                 } else if (keys1[0] === 'up') {
+
                     directions.player1 = Direccion.ARRIBA;
+
                 } else if (keys1[0] === 'down') {
+
                     directions.player1 = Direccion.ABAJO;
+
                 } 
 
                 if(properties.players === 2) {
         
                     if (keys2.length <= 0) {
+
                         directions.player2 = Direccion.QUIETO;
+
                     } else if (keys2[0] === 'up') {
+
                         directions.player2 = Direccion.ARRIBA;
+
                     } else if (keys2[0] === 'down') {
+
                         directions.player2 = Direccion.ABAJO;
+
                     } 
 
                 } else if(properties.players === 1) {
+
                     directions.player2 = this.ia.direccion();
+
                 }
 
             if(!properties.paused) {
@@ -490,19 +507,24 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 quantumLoop = parseInt( deltaLoop / 0.005, 10 );
             
                 for(var i = 0; i < quantumLoop; i++) {
+
                     this.pelota.mover(0.005);
+
                     if (this.pelotas.length > 0) {
 
                         this.pelotas[0].mover(0.005);
                         
                     }
+
                 }
 
                 quantumLoop = deltaLoop - quantumLoop * 0.005;
                 this.pelota.mover(quantumLoop);
-                
+
                 if (this.pelotas.length > 0) {
+
                     this.pelotas[0].mover(0.005);
+
                 }
 
             }
@@ -510,34 +532,39 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             this.dibujarMundo();
 
             if (this.events && this.events.draw && !properties.paused) {
+                
                 this.events.dibujar(this.contexto);
                 this.events.givePower(this.pelota, this.palas, this.contexto, this);
+            
             }
 
             this.palas[0].dibujar(this.contexto);
             this.palas[1].dibujar(this.contexto);
             
             if (this.pelotas.length > 0) {
+                
                 this.pelotas[0].dibujar(this.contexto);
+            
             }
 
             if (this.barreras.length > 0) {
+                
                 this.barreras[0].dibujar(this.contexto);
                 this.barreras[1].dibujar(this.contexto);
+
             };
 
 
             this.pelota.dibujar(this.contexto);
-
             selfLoop = this;
 
             properties.rafid = requestAnimationFrame( function(){
 
                 selfLoop.loop();
-
                 selftLoop = null;
 
             });
+
         }
 
     }
@@ -681,6 +708,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         
         if (this.vector != undefined) this.pos = this.pos.sumar(this.vector.escalar(delta));
 
+        // Player 2 gol
         if(this.pos.x - mitad < 0){
             
             this.pong.puntuaciones[1]++;
@@ -689,7 +717,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 scoreFirst.html(this.pong.puntuaciones[0]);
                 scoreSecond.html(this.pong.puntuaciones[1]);
             } 
-    
+            
+            // Event killer
             if (this.pong.events) { 
                 if (this.pong.events.tipo === 3 || this.pong.events.tipo === 4) {
 
@@ -710,9 +739,9 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
                 } else if (this.pong.events.tipo === 10) {
                 
-                    this.velocidad               = 450;
-                    this.velocidadIni            = 300;
-                    this.incrementoVelocida      = 25;
+                    this.velocidad                         = 450;
+                    this.velocidadIni                      = 300;
+                    this.incrementoVelocida                = 25;
                     this.incrementarVelocidad();
                     
                     this.pong.palas[0].velocidad           = 600;
@@ -723,22 +752,32 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 }
             }
 
+            // Collision sound (If sound is enable)
             if (properties.sound) {
+                
                 SONIDOS.gol.play();
+
             }
 
+            // Prepare ball
             this.velocidadIni = 0;
             this.sacar(1);
             var self = this;
 
             setTimeout(function () {
+                
                 self.velocidadIni = 300;
                 self.sacar(1);
+
             }, 2000);
 
+            // Set colision to 0 if you're playing in practice mode
             if (this.pong.mode === Modes.PRACTICE) {
+                
                 this.pong.colisiones = 0;
+
             }
+
         }
         
         if(this.pos.y - mitad < 0){
@@ -749,6 +788,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             }
         }
 
+        // Player 1 gol
         if (this.pong.mode != Modes.PRACTICE) {
             if(this.pos.x + mitad > canvasZone.width){
                 this.pong.puntuaciones[0]++;
@@ -811,6 +851,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             }
         }
 
+        // Collision with wall
         if(this.pos.y + mitad > canvasZone.height){
             
             this.pos.y = canvasZone.height - mitad;
@@ -824,43 +865,55 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         var vector;
 
+        // Collisions
         if(this.vector != undefined) {
 
             if(this.pong.mode === Modes.MATCH) {
                 
+                // Paddle 1 & 2 collision
+                
                 if(this.vector.x < 0 && this.colisiona(this.pong.palas[0])) {
-
+                        
                     this.vector.x *= -1;
 
                     if (this.velocidad < 7000) {
+                        
                         this.incrementarVelocidad();
+
                     }
 
                     vector = this.vector.clonar();
                     this.pong.ia.getFallo();
                     this.vector = this.vector.rotar(this.pos.y - this.pong.palas[0].pos.y);
+                    
                     if (properties.sound) {
+                        
                         SONIDOS.beep.play();
+
                     }
-
+ 
                 } else if (this.vector.x > 0 && this.colisiona(this.pong.palas[1])) {
-
+                       
                     this.vector.x *= -1;
                     
                     if (this.velocidad < 7000) {
+                        
                         this.incrementarVelocidad();
+
                     }
 
                     vector = this.vector.clonar();
-
                     this.vector = this.vector.rotar(this.pong.palas[1].pos.y - this.pos.y);
 
                     if (properties.sound) {
+                        
                         SONIDOS.beep.play();
-                    }
+
+                    }           
 
                 } 
 
+                // Events-walls collisions
                 if (this.pong.barreras.length > 0) {
 
                     if (this.pong.barreras[0].colision(this)) {
@@ -890,6 +943,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
             }   else if(this.pong.mode === Modes.PRACTICE) {
                 
+                // Paddle and wall collision
                 if(this.vector.x < 0 && this.colisiona(this.pong.palas[0])) {
 
                     this.vector.x *= -1;
@@ -915,6 +969,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                     if (properties.sound) {
                         SONIDOS.beep.play();
                     }
+                
                 }
 
             }
@@ -1339,7 +1394,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
                 }, 5000);
 
-            }
+            } 
 
         }   
     
@@ -1929,9 +1984,9 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         })
 
-        .key(' ctrl + g ', function(){
+        .key('ctrl + g', function(){
             
-            if (properties.colorDefault == '#FFF') {
+            if (properties.colorDefault === '#FFF') {
                 
                 for (var i = 0; i < properties.menus.main.length; i++) {
                     properties.menus.main[i].css('color', '#00FF00');
@@ -1952,7 +2007,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 scoreSecond.css('color', '#00FF00');
                 properties.colorDefault = '#00FF00';
 
-            } else if (properties.colorDefault == '#00FF00') {
+            } else if (properties.colorDefault === '#00FF00') {
 
                 for (var i = 0; i < properties.menus.main.length; i++) {
                     properties.menus.main[i].css('color', '#FFF');
