@@ -94,6 +94,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.sound            = true;
         this.select           = 0;
         this.colorDefault     = '#FFF';
+        this.timer            = 0;
+        this.activePower;
         this.rafid;
         this.difficult;
         this.killid;
@@ -278,7 +280,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     ##################################          CLASE PONG           ######################################
     #######################################################################################################*/
     
-    function Pong(lp1, lp2, v1, v2, iv, t) {
+    function Pong (lp1, lp2, v1, v2, iv, t) {
         
         scoreFirst.css('left', win.width()/3);
         scoreSecond.css( 'right', win.width()/3);
@@ -570,6 +572,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     }
 
     Pong.prototype.practicar = function() {
+        
         if (properties.init === true) {
             
             deltaLoop = (Date.now() - this.tiempoTranscurrido)/1000;
@@ -714,31 +717,33 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             this.pong.puntuaciones[1]++;
             
             if (this.pong.mode === Modes.MATCH) {
+                
                 scoreFirst.html(this.pong.puntuaciones[0]);
                 scoreSecond.html(this.pong.puntuaciones[1]);
+
             } 
             
             // Event killer
             if (this.pong.events) { 
-
-                if (this.pong.events.tipo === 3 || this.pong.events.tipo === 4) {
+                
+                if (properties.activePower === 3 || properties.activePower === 4) {
 
                     this.pong.palas[0].alto = canvasZone.height/5;
                     this.pong.palas[1].alto = canvasZone.height/5;
 
-                } else if (this.pong.events.tipo === 5) {
+                } else if (properties.activePower === 5) {
                 
                     clearInterval(properties.killid);
                 
-                } else if (this.pong.events.tipo === 6) {
+                } else if (properties.activePower === 6) {
                     
                     this.pong.barreras= [];
                 
-                } else if (this.pong.events.tipo === 7 || this.pong.events.tipo === 8) {
+                } else if (properties.activePower === 7 || properties.activePower === 8) {
 
                     this.lado = canvasZone.width/35; 
 
-                } else if (this.pong.events.tipo === 10) {
+                } else if (properties.activePower === 10) {
                 
                     this.velocidad                         = 450;
                     this.velocidadIni                      = 300;
@@ -748,7 +753,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                     this.pong.palas[0].velocidad           = 600;
                     this.pong.palas[1].velocidad           = 600;
                 
-                } else if (this.pong.events.tipo === 12) {
+                } else if (properties.activePower === 12) {
                     this.pong.pelotas = [];
                 }
             }
@@ -808,25 +813,25 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 }
 
                 if (this.pong.events) {  
-                    
-                    if (this.pong.events.tipo === 3 || this.pong.events.tipo === 4) {
+
+                    if (properties.activePower === 3 || properties.activePower === 4) {
 
                         this.pong.palas[0].alto = canvasZone.height/5;
                         this.pong.palas[1].alto = canvasZone.height/5;
 
-                    } else if (this.pong.events.tipo === 5) {
+                    } else if (properties.activePower === 5) {
                     
                         clearInterval(properties.killid);
                     
-                    } else if (this.pong.events.tipo === 6) {
+                    } else if (properties.activePower === 6) {
                         
                         this.pong.barreras= [];
                     
-                    } else if (this.pong.events.tipo === 7 || this.pong.events.tipo === 8) {
+                    } else if (properties.activePower === 7 || properties.activePower === 8) {
 
                         this.lado = canvasZone.width/35; 
 
-                    } else if (this.pong.events.tipo === 10) {
+                    } else if (properties.activePower === 10) {
                     
                         this.velocidad               = 450;
                         this.velocidadIni            = 300;
@@ -836,7 +841,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                         this.pong.palas[0].velocidad           = 600;
                         this.pong.palas[1].velocidad           = 600;
                     
-                    } else if (this.pong.events.tipo === 12) {
+                    } else if (properties.activePower === 12) {
                         this.pong.pelotas = [];
                     
 
@@ -1126,8 +1131,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             self.x = parseInt(Math.random() * ((canvasZone.width  * 0.75) - (canvasZone.width  * 0.25) + 1), 10) + (canvasZone.width  * 0.25);
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
-            //self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
-            self.tipo = 8;
+            self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
             self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
             
             self.draw = true;
@@ -1172,21 +1176,26 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 palas[1].color = "#000";
                 $('.weepong-score').css('color', '#000');
                 pong.lineaColor = '#000';
+                properties.activePower = 0;
                 
                 setTimeout(function() {
+                    
                     pelota.color   = '#FFF';
                     palas[0].color = '#FFF';
                     palas[1].color = '#FFF'; 
                     $('.weepong-score').css('color', '#FFF');
-                    pong.lineaColor = '#FFF'     
+                    pong.lineaColor = '#FFF';
+                    properties.activePower = null;
+
                 }, 1500);
 
             } else if (this.tipo === 1)  {
                 
                 clearInterval(properties.killid);
                 
+                properties.activePower = 1;
+
                 properties.killid = setInterval(function() {
-                    
                     pelota.color   = "#000";
                     palas[0].color = "#000";
                     palas[1].color = "#000";
@@ -1204,12 +1213,15 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 }, 300);
                 
                 setTimeout(function() {
+                    
+                    properties.activePower = null;
                     pelota.color   = "white";
                     palas[0].color = "white";
                     palas[1].color = "white";
                     $('.weepong-score').css('color', 'white');
                     pong.lineaColor = "white"; 
                     clearInterval(properties.killid);
+
                 }, 4320);
 
             } else if (this.tipo === 2)  {
@@ -1217,7 +1229,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 var dir = 0;
 
                 clearInterval(properties.killid);
-                
+                properties.activePower = 2;
+
                 properties.killid = setInterval(function(){
 
                     if (dir === 0) {
@@ -1244,10 +1257,13 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                     
                     $('.weepong-score').css('top', 15);
                     clearInterval(properties.killid);
+                    properties.activePower = 2;
 
                 }, 3500);
                 
             } else if (this.tipo === 3)  {
+
+                properties.activePower = 3;
 
                 if (this.afectado === 0) {
 
@@ -1265,6 +1281,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 }
 
             } else if (this.tipo === 4)  {
+
+                properties.activePower = 4;
 
                 if (this.afectado === 0) {
                     
@@ -1284,8 +1302,9 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             } else if (this.tipo === 5)  {
                 
                 var dir = 0;
-
                 var angles = [150, 200, 250, 300, 400];
+
+                properties.activePower =5;
 
                 clearInterval(properties.killid);
 
@@ -1304,28 +1323,38 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 }, 700);
 
                 setTimeout(function() {
+                    properties.activePower = null;
                     clearInterval(properties.killid);
                 }, 5000);
 
             } else if (this.tipo === 6)  {
+
+                properties.activePower = 6;
 
                 pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.25) - (canvasZone.width  * 0.35) + 1) + (canvasZone.width  * 0.35), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
                                  new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.65) - (canvasZone.width  * 0.75) + 1) + (canvasZone.width  * 0.75), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
 
 
                 setTimeout(function() {
+                    properties.activePower = null;
                     pong.barreras = [];
                 }, 5000); 
 
             } else if (this.tipo === 7)  {
 
+                properties.activePower =  7;
+
                 pelota.lado = canvasZone.width/15;
 
             } else if (this.tipo === 8)  {
                 
+                properties.activePower = 8;
+
                 pelota.lado = canvasZone.width/60;
 
             } else if (this.tipo === 9)  {
+
+                properties.activePower = 9;
 
                 var vel = pelota.velocidad
 
@@ -1351,6 +1380,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 
             } else if (this.tipo === 10) {
                 
+                properties.activePower = 10;
+
                 pelota.velocidad        = 1100;
                 pelota.velocidadIni     = 1100;
                 pelota.incrementoVelocida = 0;
@@ -1373,6 +1404,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
             } else if (this.tipo === 11) {
                 
+                properties.activePower = 11;
+
                 Direccion = { QUIETO: 0, ARRIBA: 2, ABAJO: 1 };
 
                 setTimeout(function () {
@@ -1383,6 +1416,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
             } else if (this.tipo === 12) {
                 
+                properties.activePower = 12;
+
                 pong.pelotas = [new Pelota(pong, 25)];
 
                 pong.pelotas[0].velocidad = pong.pelota.velocidad; 
@@ -1397,6 +1432,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 }, 5000);
 
             } else if (this.tipo === 13) {
+
+                properties.activePower = 13;
 
                 pelota.color   = "#000";
                 palas[0].color = "#000";
@@ -1442,6 +1479,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             return false; 
         } else {
 
+            properties.activePower = null;
             pelota.pong.palas[0].alto = canvasZone.height/5;
             pelota.pong.palas[1].alto = canvasZone.height/5;
             pelota.lado = canvasZone.width/35; 
