@@ -1,7 +1,7 @@
 weePong
 =======
 
-Pong remake for the web OS weeZeel maded with HTML5, canvas, and weeZeel API.
+Pong remake for the web OS weeZeel made with HTML5, canvas, and weeZeel API.
 
 
 Includes
@@ -23,7 +23,7 @@ Power-Ups:
 - Increment ball size
 - Decrement ball size
 - Black Screen during 1.5 seconds
-- Doble ball
+- Double ball
 - The screen starts to shake during 3 seconds
 - The screen blinks
 - Appears 2 walls randomly in the screen
