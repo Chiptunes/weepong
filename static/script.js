@@ -720,6 +720,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             
             // Event killer
             if (this.pong.events) { 
+
                 if (this.pong.events.tipo === 3 || this.pong.events.tipo === 4) {
 
                     this.pong.palas[0].alto = canvasZone.height/5;
@@ -790,16 +791,24 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         // Player 1 gol
         if (this.pong.mode != Modes.PRACTICE) {
+            
             if(this.pos.x + mitad > canvasZone.width){
+            
                 this.pong.puntuaciones[0]++;
+            
                 if (this.pong.mode === Modes.MATCH) {
+                
                     scoreFirst.html(this.pong.puntuaciones[0]);
                     scoreSecond.html(this.pong.puntuaciones[1]);
+                
                 } else if(this.pong.mode === Modes.PRACTICE){
+                    
                     scoreFirst.html(this.pong.colisiones);
+                
                 }
 
                 if (this.pong.events) {  
+                    
                     if (this.pong.events.tipo === 3 || this.pong.events.tipo === 4) {
 
                         this.pong.palas[0].alto = canvasZone.height/5;
@@ -829,7 +838,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                     
                     } else if (this.pong.events.tipo === 12) {
                         this.pong.pelotas = [];
+                    
+
                     }
+
                 }
                 
                 this.pong.ia.getFallo();
@@ -1114,17 +1126,18 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             self.x = parseInt(Math.random() * ((canvasZone.width  * 0.75) - (canvasZone.width  * 0.25) + 1), 10) + (canvasZone.width  * 0.25);
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
-            self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
+            //self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
+            self.tipo = 8;
             self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
             
             self.draw = true;
 
             setTimeout(function(){
+                
                 self.draw       = false;
-                self.tipo       = null;
-                self.afectado   = null;
                 self.x          = null;
                 self.y          = null;
+
             }, 10000);
 
         }, 20000);
@@ -1204,49 +1217,68 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 var dir = 0;
 
                 clearInterval(properties.killid);
+                
                 properties.killid = setInterval(function(){
 
                     if (dir === 0) {
+                
                         pelota.pos.y   += canvasZone.height * 0.05;
                         palas[0].pos.y += canvasZone.height * 0.05;
                         palas[1].pos.y += canvasZone.height * 0.05;
                         $('.weepong-score').css('top', $('.weepong-score').position().top + canvasZone.height * 0.05);
                         dir = 1;
+
                     } else if (dir === 1) {
+                
                         pelota.pos.y   -= canvasZone.height * 0.05;
                         palas[0].pos.y -= canvasZone.height * 0.05;
                         palas[1].pos.y -= canvasZone.height * 0.05;
                         $('.weepong-score').css('top', $('.weepong-score').position().top - canvasZone.height * 0.05);
                         dir = 0;
+                    
                     }
 
                 }, 10);
 
                 setTimeout(function() {
+                    
                     $('.weepong-score').css('top', 15);
                     clearInterval(properties.killid);
+
                 }, 3500);
                 
             } else if (this.tipo === 3)  {
 
                 if (this.afectado === 0) {
+
                     palas[0].alto = canvasZone.height/3;
                     palas[1].alto = canvasZone.height/3;
+
                 } else if (this.afectado === 1) {
+                    
                     palas[0].alto = canvasZone.height/3;
+                
                 } else if (this.afectado === 2) {
+                
                     palas[1].alto = canvasZone.height/3;
+                
                 }
 
             } else if (this.tipo === 4)  {
 
                 if (this.afectado === 0) {
+                    
                     palas[0].alto = canvasZone.height/8;
                     palas[1].alto = canvasZone.height/8;
+
                 } else if (this.afectado === 1) {
+                    
                     palas[0].alto = canvasZone.height/8;
+                
                 } else if (this.afectado === 2) {
+                
                     palas[1].alto = canvasZone.height/8;
+                
                 }
 
             } else if (this.tipo === 5)  {
@@ -1261,9 +1293,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                     
                     if(pelota.vector.y < 200) {
                         
-                        if(pelota.vector.y > -200) {
-                            pelota.vector.y  = angles[Math.floor(Math.random() * angles.length)]
-                        }
+                        if (pelota.vector.y > -200) pelota.vector.y  = angles[Math.floor(Math.random() * angles.length)]
                         
                         pelota.vector.y = angles[Math.floor(Math.random() * angles.length)];
                         pelota.vector.y *= -1
