@@ -265,9 +265,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     Transiciones.prototype.toInstructions = function() {
 
         pantallas.weepongSelection.css('display', 'none');
-        pantallas.weepongDifficult.css('display', 'none');
-        pantallas.weepongType.css('display', 'none');
-        pantallas.weepongSelection.css('display', 'none');
         $('.weepong-title').css('display', 'none');
         pantallas.weepongInstructions.css('display', 'block');
 
@@ -279,7 +276,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     ##################################          CLASE PONG           ######################################
     #######################################################################################################*/
     
-    // MAMAWEBO
     function Pong(lp1, lp2, v1, v2, iv, t) {
         
         scoreFirst.css('left', win.width()/3);
@@ -456,7 +452,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         
     }
 
-    // MAMAWEBO
     Pong.prototype.loop = function() {
 
         if (properties.init === true) {
@@ -949,7 +944,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     /*#####################################################################################################
     ####################################       CLASE VECTOR       #########################################
     #######################################################################################################*/
-    // mamawebo
+
     function Ia(pelota,pala,alto,jugador) {
         
         this.pelota     = pelota;
@@ -1037,7 +1032,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     /*#####################################################################################################
     ####################################       CLASE EVENTO       #########################################
     #######################################################################################################*/
-    // MAMAWEBO
 
     function Evento() {
         
@@ -1493,10 +1487,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     };
 
     $(win)
-
-        .on('hover', 'weepong-canvas', function() {
-            console.log('mamawebo');
-        })
 
         .on('click', '.weepong-selection-oneplayer', function(){
            
