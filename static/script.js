@@ -94,11 +94,22 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.sound            = true;
         this.select           = 0;
         this.colorDefault     = '#FFF';
-        this.timer            = 0;
+
+        this.pelotaVel;
+        
+        this.eventStarts;
+        this.eventTime;
+        this.powerStarts;
+        this.powerTime;
+
+        this.killidInterval;
+        this.killidTimeout;
+
         this.activePower;
+        
         this.rafid;
         this.difficult;
-        this.killid;
+
         this.menus = {
                         "main":   [$('.weepong-selection-oneplayer', win), $('.weepong-selection-twoplayers', win), $('.weepong-selection-practice', win), $('.weepong-selection-instructions', win)],
                         "single": [$('.weepong-difficult-easy', win), $('.weepong-difficult-medium', win), $('.weepong-difficult-hard', win), $('.weepong-difficult-impossible', win)],
@@ -296,7 +307,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.tipo = t;
         
         if (this.tipo === Tipos.AWESOME) {
-            this.events = new Evento();
+            this.events = new EventTrigger(this);
             this.events.init();
         }
 
@@ -726,36 +737,12 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             // Event killer
             if (this.pong.events) { 
                 
-                if (properties.activePower === 3 || properties.activePower === 4) {
-
-                    this.pong.palas[0].alto = canvasZone.height/5;
-                    this.pong.palas[1].alto = canvasZone.height/5;
-
-                } else if (properties.activePower === 5) {
+                if (properties.activePower) {
+                 
+                    this.pong.events.events[properties.activePower].killFunction();
                 
-                    clearInterval(properties.killid);
-                
-                } else if (properties.activePower === 6) {
-                    
-                    this.pong.barreras= [];
-                
-                } else if (properties.activePower === 7 || properties.activePower === 8) {
-
-                    this.lado = canvasZone.width/35; 
-
-                } else if (properties.activePower === 10) {
-                
-                    this.velocidad                         = 450;
-                    this.velocidadIni                      = 300;
-                    this.incrementoVelocida                = 25;
-                    this.incrementarVelocidad();
-                    
-                    this.pong.palas[0].velocidad           = 600;
-                    this.pong.palas[1].velocidad           = 600;
-                
-                } else if (properties.activePower === 12) {
-                    this.pong.pelotas = [];
                 }
+
             }
 
             // Collision sound (If sound is enable)
@@ -814,37 +801,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
                 if (this.pong.events) {  
 
-                    if (properties.activePower === 3 || properties.activePower === 4) {
-
-                        this.pong.palas[0].alto = canvasZone.height/5;
-                        this.pong.palas[1].alto = canvasZone.height/5;
-
-                    } else if (properties.activePower === 5) {
+                    if (properties.activePower) {
+                     
+                        this.pong.events.events[properties.activePower].killFunction();
                     
-                        clearInterval(properties.killid);
-                    
-                    } else if (properties.activePower === 6) {
-                        
-                        this.pong.barreras= [];
-                    
-                    } else if (properties.activePower === 7 || properties.activePower === 8) {
-
-                        this.lado = canvasZone.width/35; 
-
-                    } else if (properties.activePower === 10) {
-                    
-                        this.velocidad               = 450;
-                        this.velocidadIni            = 300;
-                        this.incrementoVelocida      = 25;
-                        this.incrementarVelocidad();
-                        
-                        this.pong.palas[0].velocidad           = 600;
-                        this.pong.palas[1].velocidad           = 600;
-                    
-                    } else if (properties.activePower === 12) {
-                        this.pong.pelotas = [];
-                    
-
                     }
 
                 }
@@ -1102,36 +1062,371 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     }
 
     /*#####################################################################################################
-    ####################################       CLASE EVENTO       #########################################
+    ##############################              CLASE EVENTO            ###################################
     #######################################################################################################*/
 
-    function Evento() {
+    function Evento (time, interval, timeout, pong, init, kill) {
+
+        this.duracion     = time;
+        this.pong         = pong;
+        this.initFunction = init;
+        this.killFunction = kill;
+
+        this.interval     = interval;
+        this.timeout      = timeout;
+
+    }
+
+    /*#####################################################################################################
+    ##############################       CLASE QUE LANZA EL EVENTO      ###################################
+    #######################################################################################################*/
+
+    function EventTrigger(pong) {
         
         this.x     = null;
         this.y     = null;
         this.lado  = canvasZone.width / 20;
+
+        this.pong = pong;
 
         this.draw = false;
         this.killInit;
         this.killBill;
 
         this.afects = [0, 1, 2];
-        this.types  = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
         this.afectado;
         this.tipo;
+
+        var selfET = this;
     
+        this.events = [
+
+            // Event 0
+            new Evento (1500, false, true, pong, function() {
+
+                this.pong.pelota.color   = "#000";
+                this.pong.palas[0].color = "#000";
+                this.pong.palas[1].color = "#000";
+                $('.weepong-score').css('color', '#000');
+                this.pong.lineaColor = '#000';
+
+            }, function(obj) {
+
+                obj.pong.pelota.color   = '#FFF';
+                obj.pong.palas[0].color = '#FFF';
+                obj.pong.palas[1].color = '#FFF'; 
+                $('.weepong-score').css('color', '#FFF');
+                obj.pong.lineaColor = '#FFF';
+
+            }),
+
+            // Event 1
+            new Evento (4500, true, true, pong, function() {
+
+                var self = this;
+
+                properties.killidInterval = setInterval(function() {
+                    
+                    self.pong.pelota.color   = "#000";
+                    self.pong.palas[0].color = "#000";
+                    self.pong.palas[1].color = "#000";
+                    $('.weepong-score').css('color', '#000');
+                    self.pong.lineaColor = "#000";
+
+                    setTimeout(function() {
+                            self.pong.pelota.color   = "#FFF";
+                            self.pong.palas[0].color = "#FFF";
+                            self.pong.palas[1].color = "#FFF";
+                            $('.weepong-score').css('color', '#FFF');
+                            self.pong.lineaColor = "#FFF";      
+                    }, 150);
+
+                }, 300);
+
+            }, function(obj) {
+
+                obj.pong.pelota.color   = "white";
+                obj.pong.palas[0].color = "white";
+                obj.pong.palas[1].color = "white";
+                $('.weepong-score').css('color', 'white');
+                obj.pong.lineaColor = "white"; 
+                clearInterval(properties.killidInterval);
+
+            }),
+
+            // Evento 2
+            new Evento (3500, true, true, pong, function() {
+                
+                var dir = 0;
+                var self = this;
+
+                properties.killidInterval = setInterval(function(){
+
+                    if (dir === 0) {
+                
+                        self.pong.pelota.pos.y   += canvasZone.height * 0.05;
+                        self.pong.palas[0].pos.y += canvasZone.height * 0.05;
+                        self.pong.palas[1].pos.y += canvasZone.height * 0.05;
+                        $('.weepong-score').css('top', $('.weepong-score').position().top + canvasZone.height * 0.05);
+                        dir = 1;
+
+                    } else if (dir === 1) {
+                
+                        self.pong.pelota.pos.y   -= canvasZone.height * 0.05;
+                        self.pong.palas[0].pos.y -= canvasZone.height * 0.05;
+                        self.pong.palas[1].pos.y -= canvasZone.height * 0.05;
+                        $('.weepong-score').css('top', $('.weepong-score').position().top - canvasZone.height * 0.05);
+                        dir = 0;
+                    
+                    }
+
+                }, 10);
+
+            }, function() {
+
+                $('.weepong-score').css('top', 15);
+                clearInterval(properties.killidInterval);
+                properties.activePower = 2;
+
+            }),
+
+            // Evento 3
+            new Evento (0, false, false, pong, function() {
+
+                if (selfET.afectado === 0) {
+
+                    this.pong.palas[0].alto = canvasZone.height/3;
+                    this.pong.palas[1].alto = canvasZone.height/3;
+
+                } else if (selfET.afectado === 1) {
+                    
+                    this.pong.palas[0].alto = canvasZone.height/3;
+                
+                } else if (selfET.afectado === 2) {
+                
+                    this.pong.palas[1].alto = canvasZone.height/3;
+                
+                }
+
+            }, function() {
+
+                this.pong.palas[0].alto = canvasZone.height/5;
+                this.pong.palas[1].alto = canvasZone.height/5;
+
+            }),
+
+            // Evento 4
+            new Evento (0, false, false, pong, function() {
+
+                if (selfET.afectado === 0) {
+                    
+                    this.pong.palas[0].alto = canvasZone.height/8;
+                    this.pong.palas[1].alto = canvasZone.height/8;
+
+                } else if (selfET.afectado === 1) {
+                    
+                    this.pong.palas[0].alto = canvasZone.height/8;
+                
+                } else if (selfET.afectado === 2) {
+                
+                    this.pong.palas[1].alto = canvasZone.height/8;
+                
+                }
+
+            }, function() {
+                
+                this.pong.palas[0].alto = canvasZone.height/5;
+                this.pong.palas[1].alto = canvasZone.height/5;
+
+            }),
+
+            // Evento 5
+            new Evento (5000, true, true, pong, function() {
+
+                var dir = 0;
+                var angles = [150, 200, 250, 300, 400];
+
+                var self = this;
+
+                properties.killidInterval = setInterval(function(){
+                    
+                    if(self.pong.pelota.vector.y < 200) {
+                        
+                        if (self.pong.pelota.vector.y > -200) self.pong.pelota.vector.y  = angles[Math.floor(Math.random() * angles.length)]
+                        
+                        self.pong.pelota.vector.y = angles[Math.floor(Math.random() * angles.length)];
+                        self.pong.pelota.vector.y *= -1
+                    }
+
+                    self.pong.pelota.vector.y *= -1
+
+                }, 700);
+
+            }, function () {
+
+                clearInterval(properties.killidInterval);
+
+            }),
+
+            // Evento 6
+            new Evento (5000, false, true, pong, function() {
+
+                this.pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.25) - (canvasZone.width  * 0.35) + 1) + (canvasZone.width  * 0.35), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
+                                 new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.65) - (canvasZone.width  * 0.75) + 1) + (canvasZone.width  * 0.75), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
+
+            }, function() {
+
+                this.pong.barreras = [];
+
+            }),
+
+            // Evento 7
+            new Evento (0, false, false, pong, function() {
+
+                this.pong.pelota.lado = canvasZone.width/15;
+
+            }, function() {
+
+                this.pong.pelota.lado = canvasZone.width/35;
+
+            }),
+
+            // Evento 8
+            new Evento (0, false, false, pong, function() {
+
+                this.pong.pelota.lado = canvasZone.width/60;
+
+            }, function() {
+
+                this.pong.pelota.lado = canvasZone.width/35;
+
+            }),
+
+            // Evento 9
+            new Evento (3500, false, true, pong, function() {
+
+                properties.pelotaVel = this.pong.pelota.velocidad
+
+                this.pong.pelota.velocidad                = 100;
+                this.pong.pelota.velocidadIni             = 100;
+                this.pong.pelota.incrementoVelocidad      = 0;
+                this.pong.pelota.incrementarVelocidad();
+                
+                this.pong.palas[0].velocidad              = 80;
+                this.pong.palas[1].velocidad              = 80;
+
+            }, function() {
+
+                this.pong.pelota.velocidad                = properties.pelotaVel;
+                this.pong.pelota.velocidadIni             = 300;
+                this.pong.pelota.incrementoVelocidad      = 25;
+                this.pong.pelota.incrementarVelocidad();
+                
+                this.pong.palas[0].velocidad              = 600;
+                this.pong.palas[1].velocidad              = 600;
+
+            }),
+
+            // Evento 10
+            new Evento (3500, false, true, pong, function() {
+                
+                this.pong.pelota.velocidad                = properties.pelotaVel;
+
+                this.pong.pelota.velocidad                = 1100;
+                this.pong.pelota.velocidadIni             = 1100;
+                this.pong.pelota.incrementoVelocidad      = 0;
+                this.pong.pelota.incrementarVelocidad();
+                
+                this.pong.palas[0].velocidad              = 1100;
+                this.pong.palas[1].velocidad              = 1100;
+
+            }, function() {
+    
+                this.pong.pelota.velocidad                = properties.pelotaVel;
+                this.pong.pelota.velocidadIni             = 300;
+                this.pong.pelota.incrementoVelocidad      = 25;
+                this.pong.pelota.incrementarVelocidad();
+                
+                this.pong.palas[0].velocidad              = 600;
+                this.pong.palas[1].velocidad              = 600;
+
+            }),
+
+            // Evento 11
+            new Evento (3500, false, true, pong, function() {
+
+                Direccion = { QUIETO: 0, ARRIBA: 2, ABAJO: 1 };
+
+            }, function() {
+
+                Direccion = { QUIETO: 0, ARRIBA: 1, ABAJO: 2 };
+
+            }),
+
+            // Evento 12
+            new Evento (5000, false, true, pong, function() {
+
+                this.pong.pelotas = [new Pelota(this.pong, 25)];
+
+                this.pong.pelotas[0].velocidad = this.pong.pelota.velocidad; 
+                this.pong.pelotas[0].pos.x     = this.pong.pelota.pos.x;
+                this.pong.pelotas[0].pos.y     = this.pong.pelota.pos.y;
+
+                this.pong.pelotas[0].vector    = this.pong.pelota.vector.rotar(this.pong.pelotas[0].pos.y + this.pong.palas[1].pos.y);   
+                this.pong.pelotas[0].incrementarVelocidad();
+
+            }, function() {
+
+                this.pong.pelotas = [];
+
+            }),
+
+            // Evento 13
+            new Evento (5000, false, true, pong, function() {
+
+                this.pong.pelota.color   = "#000";
+                this.pong.palas[0].color = "#000";
+                this.pong.palas[1].color = "#000";
+                $('.wz-win').css('background', '#FFF');
+
+                pauseText.css('color', '#000');
+
+                this.pong.lineaColor = "#000";
+
+                $('.weepong-score').css('color', '#000');
+
+            }, function() {
+                    
+                this.pong.pelota.color   = "#FFF";
+                this.pong.palas[0].color = "#FFF";
+                this.pong.palas[1].color = "#FFF";
+                $('.wz-win').css('background', '#000'); 
+
+                pauseText.css('color', '#000')
+
+                this.pong.lineaColor = "#FFF";
+
+                $('.weepong-score').css('color', '#FFF');
+
+            })
+
+        ];
+
     }
 
-    Evento.prototype.init = function() {
+    EventTrigger.prototype.init = function() {
         var self = this;
 
         clearInterval(this.killInit);
+        
         this.killInit = setInterval(function() {
-            
+
+            properties.powerStart = (new Date()).getTime();
+
             self.x = parseInt(Math.random() * ((canvasZone.width  * 0.75) - (canvasZone.width  * 0.25) + 1), 10) + (canvasZone.width  * 0.25);
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
-            self.tipo     = self.types[parseInt(Math.random() * self.types.length, 10)];
+            self.tipo     = parseInt(Math.random() * self.events.length, 10);
             self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
             
             self.draw = true;
@@ -1139,6 +1434,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             setTimeout(function(){
                 
                 self.draw       = false;
+                self.tipo       = false;
                 self.x          = null;
                 self.y          = null;
 
@@ -1148,7 +1444,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     }
 
-    Evento.prototype.dibujar = function(ctx) {
+    EventTrigger.prototype.dibujar = function(ctx) {
 
         if(this.afectado === 0) {
             ctx.fillStyle = '#0033FF';
@@ -1162,304 +1458,203 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     
     }
 
-    Evento.prototype.givePower = function(pelota, palas, ctx, pong) {
+    EventTrigger.prototype.givePower = function(pelota, palas, ctx, pong) {
         
         if (this.colision(pelota)) {
-            this.x      = null;
-            this.y      = null;
-            this.draw   = false;
+            
+            this.x         = null;
+            this.y         = null;
+            this.draw      = false;
+            
+            var selfEvent = this.events[this.tipo];
+
+            console.log(this.tipo);
 
             if (this.tipo === 0) {
                 
-                pelota.color   = "#000";
-                palas[0].color = "#000";
-                palas[1].color = "#000";
-                $('.weepong-score').css('color', '#000');
-                pong.lineaColor = '#000';
-                properties.activePower = 0;
+                clearInterval(properties.killidInterval);
+
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
                 
-                setTimeout(function() {
+                selfEvent.initFunction();
+
+                properties.killidTimeout = setTimeout(function() {
                     
-                    pelota.color   = '#FFF';
-                    palas[0].color = '#FFF';
-                    palas[1].color = '#FFF'; 
-                    $('.weepong-score').css('color', '#FFF');
-                    pong.lineaColor = '#FFF';
+                    selfEvent.killFunction(selfEvent);
                     properties.activePower = null;
 
-                }, 1500);
+                }, selfEvent.duracion);
 
             } else if (this.tipo === 1)  {
                 
-                clearInterval(properties.killid);
+                clearInterval(properties.killidInterval);
                 
-                properties.activePower = 1;
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
 
-                properties.killid = setInterval(function() {
-                    pelota.color   = "#000";
-                    palas[0].color = "#000";
-                    palas[1].color = "#000";
-                    $('.weepong-score').css('color', '#000');
-                    pong.lineaColor = "#000";
-                    
-                    setTimeout(function() {
-                            pelota.color   = "#FFF";
-                            palas[0].color = "#FFF";
-                            palas[1].color = "#FFF";
-                            $('.weepong-score').css('color', '#FFF');
-                            pong.lineaColor = "#FFF";      
-                    }, 150);
+                selfEvent.initFunction();
 
-                }, 300);
-                
-                setTimeout(function() {
+                properties.killidTimeout = setTimeout(function() {
                     
+                    selfEvent.killFunction(selfEvent);
                     properties.activePower = null;
-                    pelota.color   = "white";
-                    palas[0].color = "white";
-                    palas[1].color = "white";
-                    $('.weepong-score').css('color', 'white');
-                    pong.lineaColor = "white"; 
-                    clearInterval(properties.killid);
 
-                }, 4320);
+                }, selfEvent.duracion);
 
             } else if (this.tipo === 2)  {
 
-                var dir = 0;
-
-                clearInterval(properties.killid);
-                properties.activePower = 2;
-
-                properties.killid = setInterval(function(){
-
-                    if (dir === 0) {
+                clearInterval(properties.killidInterval);
                 
-                        pelota.pos.y   += canvasZone.height * 0.05;
-                        palas[0].pos.y += canvasZone.height * 0.05;
-                        palas[1].pos.y += canvasZone.height * 0.05;
-                        $('.weepong-score').css('top', $('.weepong-score').position().top + canvasZone.height * 0.05);
-                        dir = 1;
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
 
-                    } else if (dir === 1) {
-                
-                        pelota.pos.y   -= canvasZone.height * 0.05;
-                        palas[0].pos.y -= canvasZone.height * 0.05;
-                        palas[1].pos.y -= canvasZone.height * 0.05;
-                        $('.weepong-score').css('top', $('.weepong-score').position().top - canvasZone.height * 0.05);
-                        dir = 0;
+                selfEvent.initFunction();
+
+                properties.killidTimeout = setTimeout(function() {
                     
-                    }
+                    selfEvent.killFunction(selfEvent);
+                    properties.activePower = null;
 
-                }, 10);
-
-                setTimeout(function() {
-                    
-                    $('.weepong-score').css('top', 15);
-                    clearInterval(properties.killid);
-                    properties.activePower = 2;
-
-                }, 3500);
+                }, selfEvent.duracion);
                 
             } else if (this.tipo === 3)  {
 
-                properties.activePower = 3;
+                properties.activePower = this.tipo;
 
-                if (this.afectado === 0) {
-
-                    palas[0].alto = canvasZone.height/3;
-                    palas[1].alto = canvasZone.height/3;
-
-                } else if (this.afectado === 1) {
-                    
-                    palas[0].alto = canvasZone.height/3;
-                
-                } else if (this.afectado === 2) {
-                
-                    palas[1].alto = canvasZone.height/3;
-                
-                }
+                selfEvent.initFunction();
 
             } else if (this.tipo === 4)  {
 
-                properties.activePower = 4;
+                clearInterval(properties.killidInterval);
 
-                if (this.afectado === 0) {
-                    
-                    palas[0].alto = canvasZone.height/8;
-                    palas[1].alto = canvasZone.height/8;
+                properties.activePower = this.tipo;
 
-                } else if (this.afectado === 1) {
-                    
-                    palas[0].alto = canvasZone.height/8;
-                
-                } else if (this.afectado === 2) {
-                
-                    palas[1].alto = canvasZone.height/8;
-                
-                }
+                selfEvent.initFunction();
 
             } else if (this.tipo === 5)  {
-                
-                var dir = 0;
-                var angles = [150, 200, 250, 300, 400];
 
-                properties.activePower =5;
+                clearInterval(properties.killidInterval);
 
-                clearInterval(properties.killid);
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
 
-                properties.killid = setInterval(function(){
-                    
-                    if(pelota.vector.y < 200) {
-                        
-                        if (pelota.vector.y > -200) pelota.vector.y  = angles[Math.floor(Math.random() * angles.length)]
-                        
-                        pelota.vector.y = angles[Math.floor(Math.random() * angles.length)];
-                        pelota.vector.y *= -1
-                    }
+                selfEvent.initFunction();
 
-                    pelota.vector.y *= -1
-
-                }, 700);
-
-                setTimeout(function() {
+                properties.killidTimeout = setTimeout(function() {
+                   
+                    selfEvent.killFunction();
                     properties.activePower = null;
-                    clearInterval(properties.killid);
-                }, 5000);
+
+                }, selfEvent.duracion);
 
             } else if (this.tipo === 6)  {
 
-                properties.activePower = 6;
+                clearInterval(properties.killidInterval);
 
-                pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.25) - (canvasZone.width  * 0.35) + 1) + (canvasZone.width  * 0.35), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
-                                 new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.65) - (canvasZone.width  * 0.75) + 1) + (canvasZone.width  * 0.75), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
 
+                selfEvent.initFunction();
 
-                setTimeout(function() {
+                properties.killidTimeout = setTimeout(function() {
+                   
+                    selfEvent.killFunction();
                     properties.activePower = null;
-                    pong.barreras = [];
-                }, 5000); 
+                    
+                }, selfEvent.duracion); 
 
             } else if (this.tipo === 7)  {
 
-                properties.activePower =  7;
+                properties.activePower =  this.tipo;
 
-                pelota.lado = canvasZone.width/15;
+                selfEvent.initFunction();
 
             } else if (this.tipo === 8)  {
                 
-                properties.activePower = 8;
+                properties.activePower = this.tipo;
 
-                pelota.lado = canvasZone.width/60;
+                selfEvent.initFunction();
 
             } else if (this.tipo === 9)  {
 
-                properties.activePower = 9;
+                clearInterval(properties.killidInterval);
 
-                var vel = pelota.velocidad
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
 
-                pelota.velocidad        = 100;
-                pelota.velocidadIni     = 100;
-                this.incrementoVelocida = 0;
-                pelota.incrementarVelocidad();
-                
-                palas[0].velocidad      = 80;
-                palas[1].velocidad      = 80;
+                selfEvent.initFunction();
 
-                setTimeout(function() {
+                properties.killidTimeout = setTimeout(function() {
 
-                    pelota.velocidad        = vel;
-                    pelota.velocidadIni     = 300;
-                    this.incrementoVelocida = 25;
-                    pelota.incrementarVelocidad();
-                    
-                    palas[0].velocidad      = 600;
-                    palas[1].velocidad      = 600;
+                    selfEvent.killFunction();
+                    properties.activePower = null;
 
-                }, 3500);
+                }, selfEvent.duracion);
                 
             } else if (this.tipo === 10) {
                 
-                properties.activePower = 10;
+                clearInterval(prperties.killidInterval);
 
-                pelota.velocidad        = 1100;
-                pelota.velocidadIni     = 1100;
-                pelota.incrementoVelocida = 0;
-                pelota.incrementarVelocidad();
-                
-                palas[0].velocidad      = 1100;
-                palas[1].velocidad      = 1100;
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
 
-                setTimeout(function() {
+                selfEvent.initFunction();
 
-                    pelota.velocidad        = 450;
-                    pelota.velocidadIni     = 300;
-                    pelota.incrementoVelocida = 25;
-                    pelota.incrementarVelocidad();
-                    
-                    palas[0].velocidad      = 600;
-                    palas[1].velocidad      = 600;
+                properties.killidTimeout = setTimeout(function() {
 
-                }, 3500);
+                    selfEvent.killFunction();
+                    properties.activePower = null;
+
+                }, selfEvent.duracion);
 
             } else if (this.tipo === 11) {
-                
-                properties.activePower = 11;
 
-                Direccion = { QUIETO: 0, ARRIBA: 2, ABAJO: 1 };
-
-                setTimeout(function () {
-                    
-                    Direccion = { QUIETO: 0, ARRIBA: 1, ABAJO: 2 }
+                clearInterval(properties.killidInterval);
                 
-                }, 3500);
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
+
+                selfEvent.initFunction;
+
+                properties.killidTimeout = setTimeout(function () {
+
+                    selfEvent.killFunction();
+                    properties.activePower = null;
+
+                }, selfEvent.duracion);
 
             } else if (this.tipo === 12) {
                 
-                properties.activePower = 12;
+                clearInterval(properties.killidInterval);
+                
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
 
-                pong.pelotas = [new Pelota(pong, 25)];
+                selfEvent.initFunction();
 
-                pong.pelotas[0].velocidad = pong.pelota.velocidad; 
-                pong.pelotas[0].pos.x   = pelota.pos.x;
-                pong.pelotas[0].pos.y   = pelota.pos.y;
+                properties.killidTimeout = setTimeout(function () {
 
-                pong.pelotas[0].vector  =  pelota.vector.rotar(pong.pelotas[0].pos.y + palas[1].pos.y);   
-                pong.pelotas[0].incrementarVelocidad();
+                    selfEvent.killFunction();
+                    properties.activePower = null;
 
-                setTimeout(function() {
-                    pong.pelotas = [];
-                }, 5000);
+                }, selfEvent.duracion);
 
             } else if (this.tipo === 13) {
 
-                properties.activePower = 13;
+                clearInterval(properties.killidInterval);
+                
+                properties.activePower = this.tipo;
+                properties.eventStarts = Date.now();
 
-                pelota.color   = "#000";
-                palas[0].color = "#000";
-                palas[1].color = "#000";
-                $('.wz-win').css('background', '#FFF');
+                selfEvent.initFunction();
 
-                var trozos = 31;
-                var trozo  = Math.round(canvasZone.height / trozos);
-                var mitad  = Math.round(canvasZone.width / 2);
+                properties.killidTimeout = setTimeout(function () {
 
-                pong.lineaColor = "#000";
+                    selfEvent.killFunction();
+                    properties.activePower = null;
 
-                $('.weepong-score').css('color', '#000');
-
-                setTimeout(function() {
-                    
-                    pelota.color   = "#FFF";
-                    palas[0].color = "#FFF";
-                    palas[1].color = "#FFF";
-                    $('.wz-win').css('background', '#000'); 
-
-                    pong.lineaColor = "#FFF";
-
-                    $('.weepong-score').css('color', '#FFF');
-
-                }, 5000);
+                }, selfEvent.duracion);
 
             } 
 
@@ -1467,7 +1662,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     
     }
 
-    Evento.prototype.colision = function(pelota) {
+    EventTrigger.prototype.colision = function(pelota) {
 
         if (pelota.pos.y + pelota.lado < this.y) {
             return false;
@@ -1483,7 +1678,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             pelota.pong.palas[0].alto = canvasZone.height/5;
             pelota.pong.palas[1].alto = canvasZone.height/5;
             pelota.lado = canvasZone.width/35; 
-            clearInterval(properties.killid);
+            clearInterval(properties.killidInterval);
             return true;
 
         }
@@ -1542,20 +1737,28 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     //Vectores
     function Vector2D(x, y){
+        
         this.x = x;
         this.y = y;
+
     }
 
     Vector2D.prototype.longitud = function(){
+        
         return( Math.sqrt( this.x * this.x + this.y * this.y ) );
+
     };
 
     Vector2D.prototype.escalar = function( e ){
+        
         return( new Vector2D( this.x * e, this.y * e ) );
+
     };
 
     Vector2D.prototype.sumar = function( v ){
+        
         return( new Vector2D( this.x + v.x, this.y + v.y ) );
+
     };
 
     Vector2D.prototype.normalizar = function(){
@@ -1679,17 +1882,63 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         })
 
         .key('p', function(){
+            
             if(!properties.menu){
+                
                 if(properties.paused){
+                    
                     $('#sound').css('display', 'none');
                     pauseText.css('display', 'none');
                     properties.paused = false;
+
+                    if (properties.activePower) {
+
+                        if (pong.events.events[properties.activePower].timeout) {
+
+                            if (pong.events.events[properties.activePower].interval) pong.events.events[properties.activePower].initFunction();
+
+                            properties.killidTimeout = setTimeout(function() {
+
+                                console.log('no más');
+
+                                pong.events.events[properties.activePower].killFunction(pong.events.events[properties.activePower]);
+                                clearTimeout(properties.killidTimeout);
+
+                            }, properties.eventTime);
+
+                        }
+
+                    }
+
                 } else {
+                   
                     $('#sound').css('display', 'block');
                     pauseText.css('display', 'block');
                     properties.paused = true;
+
+                    if (properties.activePower) {
+
+                        if (pong.events.events[properties.activePower].timeout) {
+
+                            clearTimeout(properties.killidTimeout);
+                            
+                            var time = Date.now() - properties.eventStarts;
+                            properties.eventTime = pong.events.events[properties.activePower].duracion - time;
+
+                            if(pong.events.events[properties.activePower].interval) {
+                                
+                                clearInterval(properties.killidInterval);
+
+                            }
+
+                        }
+
+                    }
+
                 }
+            
             }
+
         })
 
         // teclas
