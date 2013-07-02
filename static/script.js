@@ -1665,20 +1665,31 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     EventTrigger.prototype.colision = function(pelota) {
 
         if (pelota.pos.y + pelota.lado < this.y) {
+            
             return false;
-        } else if (pelota.pos.y > this.y + this.lado) {
+
+        } else if (pelota.pos.y > this.y + this.lado + 5) {
+            
             return false;
+
         } else if (pelota.pos.x + pelota.lado < this.x) {
+            
             return false;
-        } else if (pelota.pos.x > this.x + this.lado) {
+
+        } else if (pelota.pos.x > this.x + this.lado + 5) {
+            
             return false; 
+
         } else {
 
             properties.activePower = null;
+
             pelota.pong.palas[0].alto = canvasZone.height/5;
             pelota.pong.palas[1].alto = canvasZone.height/5;
             pelota.lado = canvasZone.width/35; 
+
             clearInterval(properties.killidInterval);
+
             return true;
 
         }
