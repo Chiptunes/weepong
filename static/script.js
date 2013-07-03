@@ -6,6 +6,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     var pauseText       = $('.weepong-pause', win);
     var canvasZone      = $('.weepong-canvas',win)[0];
 
+    var xx = 0;
+
     window.requestAnimationFrame = (function(){
         return  window.requestAnimationFrame       ||
                 window.webkitRequestAnimationFrame ||
@@ -99,8 +101,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         
         this.eventStarts;
         this.eventTime;
-        this.powerStarts;
-        this.powerTime;
+        this.powerStarts = 0;
+        this.powerTime   = 0;
 
         this.killidInterval;
         this.killidTimeout;
@@ -311,7 +313,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         
         if (this.tipo === Tipos.AWESOME) {
             this.events = new EventTrigger(this);
-            this.events.init(this.events);
+            xx += 1;
+            this.events.init();
         }
 
         this.barreras = [];
@@ -980,7 +983,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     ####################################       CLASE VECTOR       #########################################
     #######################################################################################################*/
 
-    function Ia(pelota,pala,alto,jugador) {
+    function Ia (pelota,pala,alto,jugador) {
         
         this.pelota     = pelota;
         this.pala       = pala;
@@ -991,7 +994,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     }
     
-    Ia.prototype.calcularRebotes = function() {
+    Ia.prototype.calcularRebotes = function () {
         if (this.prediccion!=null) return;
         
         var tiempo    = Math.abs((this.pala.pos.x-this.pelota.pos.x)/this.pelota.vector.x);
@@ -1013,14 +1016,14 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     
     }
     
-    Ia.prototype.getFallo = function() {
+    Ia.prototype.getFallo = function () {
         
         var ops = [1, 2];
         this.fallo = (ops[ parseInt(Math.random()*ops.length, 10 )]);
     
     }
 
-    Ia.prototype.direccion = function() {
+    Ia.prototype.direccion = function () {
         
         var ideal;
 
@@ -1273,7 +1276,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             new Evento (5000, false, true, pong, function() {
 
                 this.pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.25) - (canvasZone.width  * 0.35) + 1) + (canvasZone.width  * 0.35), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
-                                 new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.65) - (canvasZone.width  * 0.75) + 1) + (canvasZone.width  * 0.75), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
+                                      new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.65) - (canvasZone.width  * 0.75) + 1) + (canvasZone.width  * 0.75), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
 
             }, function() {
 
@@ -1403,7 +1406,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 this.pong.palas[1].color = "#FFF";
                 $('.wz-win').css('background', '#000'); 
 
-                pauseText.css('color', '#000')
+                pauseText.css('color', '#FFF')
 
                 this.pong.lineaColor = "#FFF";
 
@@ -1415,10 +1418,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     }
 
-    EventTrigger.prototype.init = function(obj) {
-        
-        var self = obj;
-        
+    EventTrigger.prototype.init = function() {
+
+        var self = this;
+
         properties.killInit = setInterval(function() {
 
             properties.powerStarts = Date.now();
@@ -1447,11 +1450,17 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     EventTrigger.prototype.dibujar = function(ctx) {
 
         if(this.afectado === 0) {
+            
             ctx.fillStyle = '#0033FF';
+
         } else if(this.afectado === 1) {
+            
             ctx.fillStyle = '#00FF33';
+        
         } else if(this.afectado === 2) {
+        
             ctx.fillStyle = '#FF0000';
+        
         }
 
         ctx.fillRect(this.x, this.y, this.lado, this.lado);
@@ -1465,10 +1474,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             this.x         = null;
             this.y         = null;
             this.draw      = false;
-            
-            var selfEvent = this.events[this.tipo];
 
             console.log(this.tipo);
+            
+            var selfEvent = this.events[this.tipo];
 
             if (this.tipo === 0) {
                 
@@ -1615,7 +1624,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 properties.activePower = this.tipo;
                 properties.eventStarts = Date.now();
 
-                selfEvent.initFunction;
+                selfEvent.initFunction();
 
                 properties.killidTimeout = setTimeout(function () {
 
@@ -1902,51 +1911,30 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             
             if(!properties.menu){
                 
-                if(properties.paused){
-                    
+                if(properties.paused) {
+                        
                     $('#sound').css('display', 'none');
                     pauseText.css('display', 'none');
                     properties.paused = false;
 
-                    var diff   = properties.powerTime - 10000;
-                    var events = pong.events
+                    pong.events.init();
 
-                    if (properties.powerTime > 10000) {
+                    if (properties.powerStarts > 0) {
 
-                        var id = setTimeout(function() {
+                        if (properties.powerTime < 10000) {
 
-                            clearTimeout(id);
+                            setTimeout(function() {
 
-                            events.draw       = false;
-                            events.tipo       = false;
-                            events.x          = null;
-                            events.y          = null;
+                                self.draw       = false;
+                                self.tipo       = false;
+                                self.x          = null;
+                                self.y          = null;
 
-                            events.init(events);
+                            }, 10000 - properties.powerTime);
 
-                        }, diff);
-
-                    } else {
-
-                        var id = setTimeout(function() {
-
-                            clearTimeout(id);
-
-                            events.x = parseInt(Math.random() * ((canvasZone.width  * 0.75) - (canvasZone.width  * 0.25) + 1), 10) + (canvasZone.width  * 0.25);
-                            events.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
-                            
-                            events.tipo     = parseInt(Math.random() * events.events.length, 10);
-                            events.afectado = events.afects[parseInt(Math.random() * events.afects.length, 10)];
-                            
-                            events.draw = true;
-
-                            events.init(events)
-
-                        }, diff);
+                        } 
 
                     }
-
-                    setTimeout(pong.events.init, properties);
 
                     if (properties.activePower) {
 
@@ -1969,6 +1957,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                    
                     clearInterval(properties.killInit); 
                     clearTimeout(properties.killBill);
+
+                    properties.powerTime = Date.now() - properties.powerStarts;
 
                     $('#sound').css('display', 'block');
                     pauseText.css('display', 'block');
