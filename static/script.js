@@ -925,6 +925,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                     if (this.pong.barreras[0].colision(this)) {
 
                         this.vector.x *= -1;
+                        console.log('coli primera barra');
 
                         vector = this.vector.clonar();
                         this.vector = this.vector.rotar(this.pong.barreras[0].y - this.pos.y);
@@ -933,11 +934,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                             SONIDOS.beep.play();
                         }
 
-                    } 
-
-                    if (this.pong.barreras[1].colision(this)) {
+                    } else if (this.pong.barreras[1].colision(this)) {
 
                         this.vector.x *= -1;
+                        console.log('coli segunda barra');
 
                         vector = this.vector.clonar();
                         this.vector = this.vector.rotar(this.pong.barreras[1].y - this.pos.y);
@@ -961,9 +961,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                             SONIDOS.beep.play();
                         }
 
-                    } 
-
-                    if (this.pong.barreras[1].colision(this)) {
+                    } else if (this.pong.barreras[1].colision(this)) {
 
                         this.vector.x *= -1;
 
@@ -974,9 +972,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                             SONIDOS.beep.play();
                         }
 
-                    }  
-
-                    if (this.pong.barreras[2].colision(this)) {
+                    }  else if (this.pong.barreras[2].colision(this)) {
 
                         this.vector.x *= -1;
 
@@ -1181,13 +1177,13 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 $('.weepong-score').css('color', '#000');
                 this.pong.lineaColor = '#000';
 
-            }, function(obj) {
+            }, function() {
 
-                obj.pong.pelota.color   = '#FFF';
-                obj.pong.palas[0].color = '#FFF';
-                obj.pong.palas[1].color = '#FFF'; 
+                this.pong.pelota.color   = '#FFF';
+                this.pong.palas[0].color = '#FFF';
+                this.pong.palas[1].color = '#FFF'; 
                 $('.weepong-score').css('color', '#FFF');
-                obj.pong.lineaColor = '#FFF';
+                this.pong.lineaColor = '#FFF';
 
             }),
 
@@ -1214,13 +1210,13 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
                 }, 300);
 
-            }, function(obj) {
+            }, function() {
 
-                obj.pong.pelota.color   = "white";
-                obj.pong.palas[0].color = "white";
-                obj.pong.palas[1].color = "white";
+                this.pong.pelota.color   = "white";
+                this.pong.palas[0].color = "white";
+                this.pong.palas[1].color = "white";
                 $('.weepong-score').css('color', 'white');
-                obj.pong.lineaColor = "white"; 
+                this.pong.lineaColor = "white"; 
                 clearInterval(properties.killidInterval);
 
             }),
@@ -1513,7 +1509,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
             //self.tipo     = parseInt(Math.random() * self.events.length, 10);
-            self.tipo     = 6;
+            self.tipo = 6;
             self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
             
             self.draw = true;
@@ -1558,8 +1554,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             this.x         = null;
             this.y         = null;
             this.draw      = false;
-
-            console.log(this.tipo);
             
             var selfEvent = this.events[this.tipo];
 
@@ -1804,33 +1798,47 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     Barrera.prototype.colision = function (pelota) {
 
-        if (pelota.pos.y + pelota.lado < this.y - 5) {
+        if (pelota.pos.y + pelota.lado < this.y - 2) {
             
             return false;
 
-        } else if (pelota.pos.y > this.alto + this.y + 5) {
+        } else if (pelota.pos.y > this.alto + this.y + 2) {
             
             return false;
 
-        } else if (pelota.pos.x + pelota.lado < this.x - 3) {
+        } else if (pelota.pos.x + pelota.lado < this.x) {
             
             return false;
 
-        } else if (pelota.pos.x > this.x + this.ancho + 3) {
+        } else if (pelota.pos.x > this.x + this.ancho) {
             
             return false;
 
         } else {
 
+            if ( (pelota.pos.x < (this.x + this.ancho/3)) && (pelota.pos.x > (this.x + 2 * (this.ancho / 3))) ) {
+
+                if (pelota.vector.x > 0) {
+
+                    pelota.pos.x = this.x + pelota.lado + 1;
+
+                } else {
+
+                    pelota.pos.x = this.x + this.ancho + 1;
+
+                }
+
+            }
+
             if (pelota.pos.y + pelota.lado > this.y - 2 && pelota.pos.y + pelota.lado < this.y) {
                 
                 pelota.pos.y = this.y - 3 + pelota.lado;
-                return true;
+                pelota.vector.y *= -1;
 
             } else if (pelota.pos.y < this.y + this.alto + 2 && pelota.pos.y > this.y + this.alto) {
 
                 pelota.pos.y = this.y + this.alto + 3;
-                return true;
+                pelota.vector.y *= -1;
 
             } else {
 
@@ -1855,7 +1863,15 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         if (Math.abs(x - pelota.pos.x) < 30) {
 
-            this.generateX(min, max, pelota);
+            if (pelota.vecotr.x > 0) {
+
+                return x - 2 * pelota.lado;
+
+            } else {
+
+                return x + 2 * pelota.lado;
+
+            }
 
         } else {
 
