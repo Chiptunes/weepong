@@ -1508,8 +1508,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             self.x = parseInt(Math.random() * ((canvasZone.width  * 0.75) - (canvasZone.width  * 0.25) + 1), 10) + (canvasZone.width  * 0.25);
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
-            //self.tipo     = parseInt(Math.random() * self.events.length, 10);
-            self.tipo = 6;
+            self.tipo     = parseInt(Math.random() * self.events.length, 10);
             self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
             
             self.draw = true;
