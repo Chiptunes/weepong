@@ -1346,18 +1346,18 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
                 if (number === 1) {
 
-                    this.pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.4) - (canvasZone.width  * 0.6) + 1) + (canvasZone.width  * 0.6), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
+                    this.pong.barreras = [new Barrera(0.4, 0.6, 0.2, 0.8, this.pong.pelota)];
 
                 } else if (number === 2)  {
 
-                    this.pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.25) - (canvasZone.width  * 0.35) + 1) + (canvasZone.width  * 0.35), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
-                                          new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.65) - (canvasZone.width  * 0.75) + 1) + (canvasZone.width  * 0.75), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
-                
+                    this.pong.barreras = [new Barrera(0.25, 0.65, 0.2, 0.8, this.pong.pelota),
+                                          new Barrera(0.65, 0.75, 0.2, 0.8, this.pong.pelota)];
+
                 } else if (number === 3) {
 
-                    this.pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.2) - (canvasZone.width  * 0.3) + 1) + (canvasZone.width  * 0.3), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
-                                          new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.4) - (canvasZone.width  * 0.6) + 1) + (canvasZone.width  * 0.6), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
-                                          new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.7) - (canvasZone.width  * 0.8) + 1) + (canvasZone.width  * 0.8), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
+                    this.pong.barreras = [new Barrera(0.2, 0.3, 0.2, 0.8, this.pong.pelota),
+                                          new Barrera(0.4, 0.6, 0.2, 0.8, this.pong.pelota),
+                                          new Barrera(0.7, 0.8, 0.2, 0.8, this.pong.pelota)];
 
                 }
 
@@ -1793,10 +1793,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     ###################################       CLASE BARRERAS        #######################################
     #######################################################################################################*/
 
-    function Barrera(x, y) {
+    function Barrera(minX, maxX, minY, maxY, pelota) {
         
-        this.x = x;
-        this.y = y;
+        this.x = this.generateX(minX, maxX, pelota);
+        this.y = parseInt(Math.random() * ((canvasZone.height * minY) - (canvasZone.height * maxY) + 1) + (canvasZone.height * maxY), 10);
         this.ancho = canvasZone.width  / 35;
         this.alto  = canvasZone.height / 4.5;
     
@@ -1812,11 +1812,11 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             
             return false;
 
-        } else if (pelota.pos.x + pelota.lado < this.x + 3) {
+        } else if (pelota.pos.x + pelota.lado < this.x - 3) {
             
             return false;
 
-        } else if (pelota.pos.x > this.x + this.ancho) {
+        } else if (pelota.pos.x > this.x + this.ancho + 3) {
             
             return false;
 
@@ -1849,7 +1849,19 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     
     }
 
-    Barrera.prototype.generateX = function (min, max) {
+    Barrera.prototype.generateX = function (min, max, pelota) {
+
+        var x = parseInt(Math.random() * ((canvasZone.width  * min) - (canvasZone.width  * max) + 1) + (canvasZone.width  * max), 10);
+
+        if (Math.abs(x - pelota.pos.x) < 30) {
+
+            this.generateX(min, max, pelota);
+
+        } else {
+
+            return x;
+
+        }
 
     } 
 
