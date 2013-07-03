@@ -6,8 +6,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     var pauseText       = $('.weepong-pause', win);
     var canvasZone      = $('.weepong-canvas',win)[0];
 
-    var xx = 0;
-
     window.requestAnimationFrame = (function(){
         return  window.requestAnimationFrame       ||
                 window.webkitRequestAnimationFrame ||
@@ -66,8 +64,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
 
     function Direction() {
+        
         this.player1;
         this.player2;
+
     }
 
     var Direccion       = { QUIETO: 0, ARRIBA: 1, ABAJO: 2 };
@@ -313,7 +313,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         
         if (this.tipo === Tipos.AWESOME) {
             this.events = new EventTrigger(this);
-            xx += 1;
             this.events.init();
         }
 
@@ -566,12 +565,22 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             
             }
 
-            if (this.barreras.length > 0) {
-                
+            if (this.barreras.length === 1) {
+
+                this.barreras[0].dibujar(this.contexto);
+
+            } else if (this.barreras.length === 2) {
+
                 this.barreras[0].dibujar(this.contexto);
                 this.barreras[1].dibujar(this.contexto);
 
-            };
+            } else if (this.barreras.length === 3) {
+                
+                this.barreras[0].dibujar(this.contexto);
+                this.barreras[1].dibujar(this.contexto);
+                this.barreras[2].dibujar(this.contexto);
+
+            }
 
 
             this.pelota.dibujar(this.contexto);
@@ -854,7 +863,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             if(this.pong.mode === Modes.MATCH) {
                 
                 // Paddle 1 & 2 collision
-                
                 if(this.vector.x < 0 && this.colisiona(this.pong.palas[0])) {
                         
                     this.vector.x *= -1;
@@ -897,7 +905,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 } 
 
                 // Events-walls collisions
-                if (this.pong.barreras.length > 0) {
+                if (this.pong.barreras.length === 1) {
 
                     if (this.pong.barreras[0].colision(this)) {
 
@@ -910,7 +918,24 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                             SONIDOS.beep.play();
                         }
 
-                    } else if (this.pong.barreras[1].colision(this)) {
+                    } 
+
+                } else if (this.pong.barreras.length === 2) {
+
+                    if (this.pong.barreras[0].colision(this)) {
+
+                        this.vector.x *= -1;
+
+                        vector = this.vector.clonar();
+                        this.vector = this.vector.rotar(this.pong.barreras[0].y - this.pos.y);
+                        
+                        if (properties.sound) {
+                            SONIDOS.beep.play();
+                        }
+
+                    } 
+
+                    if (this.pong.barreras[1].colision(this)) {
 
                         this.vector.x *= -1;
 
@@ -921,7 +946,49 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                             SONIDOS.beep.play();
                         }
 
+                    }  
+
+                } else if (this.pong.barreras.length === 3) {
+
+                    if (this.pong.barreras[0].colision(this)) {
+
+                        this.vector.x *= -1;
+
+                        vector = this.vector.clonar();
+                        this.vector = this.vector.rotar(this.pong.barreras[0].y - this.pos.y);
+                        
+                        if (properties.sound) {
+                            SONIDOS.beep.play();
+                        }
+
                     } 
+
+                    if (this.pong.barreras[1].colision(this)) {
+
+                        this.vector.x *= -1;
+
+                        vector = this.vector.clonar();
+                        this.vector = this.vector.rotar(this.pong.barreras[1].y - this.pos.y);
+                        
+                        if (properties.sound) {
+                            SONIDOS.beep.play();
+                        }
+
+                    }  
+
+                    if (this.pong.barreras[2].colision(this)) {
+
+                        this.vector.x *= -1;
+
+                        vector = this.vector.clonar();
+                        this.vector = this.vector.rotar(this.pong.barreras[1].y - this.pos.y);
+                        
+                        if (properties.sound) {
+                            SONIDOS.beep.play();
+                        }
+
+                    }  
+
                 }
 
             }   else if(this.pong.mode === Modes.PRACTICE) {
@@ -1275,8 +1342,24 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             // Evento 6
             new Evento (5000, false, true, pong, function() {
 
-                this.pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.25) - (canvasZone.width  * 0.35) + 1) + (canvasZone.width  * 0.35), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
-                                      new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.65) - (canvasZone.width  * 0.75) + 1) + (canvasZone.width  * 0.75), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
+                var number = parseInt(Math.random() * (4 - 1) + 1);
+
+                if (number === 1) {
+
+                    this.pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.4) - (canvasZone.width  * 0.6) + 1) + (canvasZone.width  * 0.6), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
+
+                } else if (number === 2)  {
+
+                    this.pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.25) - (canvasZone.width  * 0.35) + 1) + (canvasZone.width  * 0.35), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
+                                          new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.65) - (canvasZone.width  * 0.75) + 1) + (canvasZone.width  * 0.75), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
+                
+                } else if (number === 3) {
+
+                    this.pong.barreras = [new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.2) - (canvasZone.width  * 0.3) + 1) + (canvasZone.width  * 0.3), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
+                                          new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.4) - (canvasZone.width  * 0.6) + 1) + (canvasZone.width  * 0.6), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10)),
+                                          new Barrera(parseInt(Math.random() * ((canvasZone.width  * 0.7) - (canvasZone.width  * 0.8) + 1) + (canvasZone.width  * 0.8), 10), parseInt(Math.random() * ((canvasZone.height * 0.2) - (canvasZone.height * 0.8) + 1) + (canvasZone.height * 0.8), 10))];
+
+                }
 
             }, function() {
 
@@ -1429,7 +1512,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             self.x = parseInt(Math.random() * ((canvasZone.width  * 0.75) - (canvasZone.width  * 0.25) + 1), 10) + (canvasZone.width  * 0.25);
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
-            self.tipo     = parseInt(Math.random() * self.events.length, 10);
+            //self.tipo     = parseInt(Math.random() * self.events.length, 10);
+            self.tipo     = 6;
             self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
             
             self.draw = true;
@@ -1718,28 +1802,56 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     
     }
 
-    Barrera.prototype.colision = function(pelota) {
+    Barrera.prototype.colision = function (pelota) {
 
-        if (pelota.pos.y + pelota.lado < this.y) {
+        if (pelota.pos.y + pelota.lado < this.y - 5) {
+            
             return false;
-        } else if (pelota.pos.y > this.alto + this.y) {
+
+        } else if (pelota.pos.y > this.alto + this.y + 5) {
+            
             return false;
-        } else if (pelota.pos.x + pelota.lado < this.x) {
+
+        } else if (pelota.pos.x + pelota.lado < this.x + 3) {
+            
             return false;
+
         } else if (pelota.pos.x > this.x + this.ancho) {
+            
             return false;
+
         } else {
-            return true;
+
+            if (pelota.pos.y + pelota.lado > this.y - 2 && pelota.pos.y + pelota.lado < this.y) {
+                
+                pelota.pos.y = this.y - 3 + pelota.lado;
+                return true;
+
+            } else if (pelota.pos.y < this.y + this.alto + 2 && pelota.pos.y > this.y + this.alto) {
+
+                pelota.pos.y = this.y + this.alto + 3;
+                return true;
+
+            } else {
+
+                return true;
+
+            }
+
         }
 
     }
 
-    Barrera.prototype.dibujar = function(ctx) {
+    Barrera.prototype.dibujar = function (ctx) {
         
         ctx.fillStyle = "#999";
         ctx.fillRect(this.x, this.y, this.ancho, this.alto);
     
     }
+
+    Barrera.prototype.generateX = function (min, max) {
+
+    } 
 
     /*#####################################################################################################
     ###################################          SONIDOS           ########################################
