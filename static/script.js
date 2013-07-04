@@ -98,6 +98,8 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.colorDefault     = '#FFF';
 
         this.pelotaVel;
+
+        this.colision         = true;
         
         this.eventStarts;
         this.eventTime;
@@ -905,85 +907,123 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
                 } 
 
                 // Events-walls collisions
-                if (this.pong.barreras.length === 1) {
+                if (properties.colision) {
 
-                    if (this.pong.barreras[0].colision(this)) {
+                    if (this.pong.barreras.length === 1) {
 
-                        this.vector.x *= -1;
+                        if (this.pong.barreras[0].colision(this)) {
 
-                        vector = this.vector.clonar();
-                        this.vector = this.vector.rotar(this.pong.barreras[0].y - this.pos.y);
-                        
-                        if (properties.sound) {
-                            SONIDOS.beep.play();
-                        }
+                            this.vector.x *= -1;
 
-                    } 
+                            vector = this.vector.clonar();
+                            this.vector = this.vector.rotar(this.pong.barreras[0].y - this.pos.y);
+                            
+                            if (properties.sound) {
+                                SONIDOS.beep.play();
+                            }
 
-                } else if (this.pong.barreras.length === 2) {
+                            properties.colision = false;
 
-                    if (this.pong.barreras[0].colision(this)) {
+                            setTimeout(function() {
+                                properties.colision = true;
+                            }, 150);
 
-                        this.vector.x *= -1;
-                        console.log('coli primera barra');
+                        } 
 
-                        vector = this.vector.clonar();
-                        this.vector = this.vector.rotar(this.pong.barreras[0].y - this.pos.y);
-                        
-                        if (properties.sound) {
-                            SONIDOS.beep.play();
-                        }
+                    } else if (this.pong.barreras.length === 2) {
 
-                    } else if (this.pong.barreras[1].colision(this)) {
+                        if (this.pong.barreras[0].colision(this)) {
 
-                        this.vector.x *= -1;
-                        console.log('coli segunda barra');
+                            this.vector.x *= -1;
 
-                        vector = this.vector.clonar();
-                        this.vector = this.vector.rotar(this.pong.barreras[1].y - this.pos.y);
-                        
-                        if (properties.sound) {
-                            SONIDOS.beep.play();
-                        }
+                            vector = this.vector.clonar();
+                            this.vector = this.vector.rotar(this.pong.barreras[0].y - this.pos.y);
+                            
+                            if (properties.sound) {
+                                SONIDOS.beep.play();
+                            }
 
-                    }  
+                            properties.colision = false;
 
-                } else if (this.pong.barreras.length === 3) {
+                            setTimeout(function() {
+                                properties.colision = true;
+                            }, 150);
 
-                    if (this.pong.barreras[0].colision(this)) {
+                        } else if (this.pong.barreras[1].colision(this)) {
 
-                        this.vector.x *= -1;
+                            this.vector.x *= -1;
 
-                        vector = this.vector.clonar();
-                        this.vector = this.vector.rotar(this.pong.barreras[0].y - this.pos.y);
-                        
-                        if (properties.sound) {
-                            SONIDOS.beep.play();
-                        }
+                            vector = this.vector.clonar();
+                            this.vector = this.vector.rotar(this.pong.barreras[1].y - this.pos.y);
+                            
+                            if (properties.sound) {
+                                SONIDOS.beep.play();
+                            }
 
-                    } else if (this.pong.barreras[1].colision(this)) {
+                            properties.colision = false;
 
-                        this.vector.x *= -1;
+                            setTimeout(function() {
+                                properties.colision = true;
+                            }, 150);
 
-                        vector = this.vector.clonar();
-                        this.vector = this.vector.rotar(this.pong.barreras[1].y - this.pos.y);
-                        
-                        if (properties.sound) {
-                            SONIDOS.beep.play();
-                        }
+                        }  
 
-                    }  else if (this.pong.barreras[2].colision(this)) {
+                    } else if (this.pong.barreras.length === 3) {
 
-                        this.vector.x *= -1;
+                        if (this.pong.barreras[0].colision(this)) {
 
-                        vector = this.vector.clonar();
-                        this.vector = this.vector.rotar(this.pong.barreras[1].y - this.pos.y);
-                        
-                        if (properties.sound) {
-                            SONIDOS.beep.play();
-                        }
+                            this.vector.x *= -1;
 
-                    }  
+                            vector = this.vector.clonar();
+                            this.vector = this.vector.rotar(this.pong.barreras[0].y - this.pos.y);
+                            
+                            if (properties.sound) {
+                                SONIDOS.beep.play();
+                            }
+
+                            properties.colision = false;
+
+                            setTimeout(function() {
+                                properties.colision = true;
+                            }, 150);
+
+                        } else if (this.pong.barreras[1].colision(this)) {
+
+                            this.vector.x *= -1;
+
+                            vector = this.vector.clonar();
+                            this.vector = this.vector.rotar(this.pong.barreras[1].y - this.pos.y);
+                            
+                            if (properties.sound) {
+                                SONIDOS.beep.play();
+                            }
+
+                            properties.colision = false;
+
+                            setTimeout(function() {
+                                properties.colision = true;
+                            }, 150);
+
+                        }  else if (this.pong.barreras[2].colision(this)) {
+
+                            this.vector.x *= -1;
+
+                            vector = this.vector.clonar();
+                            this.vector = this.vector.rotar(this.pong.barreras[1].y - this.pos.y);
+                            
+                            if (properties.sound) {
+                                SONIDOS.beep.play();
+                            }
+
+                            properties.colision = false;
+
+                            setTimeout(function() {
+                                properties.colision = true;
+                            }, 150);
+
+                        }  
+
+                    }
 
                 }
 
@@ -1344,7 +1384,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
                     this.pong.barreras = [new Barrera(0.4, 0.6, 0.2, 0.8, this.pong.pelota)];
 
-                } else if (number === 2)  {
+                } else if (number === 2)  {
 
                     this.pong.barreras = [new Barrera(0.25, 0.65, 0.2, 0.8, this.pong.pelota),
                                           new Barrera(0.65, 0.75, 0.2, 0.8, this.pong.pelota)];
@@ -1797,62 +1837,32 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     Barrera.prototype.colision = function (pelota) {
 
-        if (pelota.pos.y + pelota.lado < this.y - 2) {
-            
-            return false;
+        if ( parseInt(pelota.pos.x) > parseInt(this.x + this.ancho) ) {
 
-        } else if (pelota.pos.y > this.alto + this.y + 2) {
-            
-            return false;
+            return false
 
-        } else if (pelota.pos.x + pelota.lado < this.x) {
-            
-            return false;
+        } else if ( parseInt(pelota.pos.x + pelota.lado) < parseInt(this.x) ) {
 
-        } else if (pelota.pos.x > this.x + this.ancho) {
-            
-            return false;
+            return false
 
-        } else {
+        } else if ( parseInt(pelota.pos.y + pelota.lado) < parseInt(this.y) ) {
 
-            if ( (pelota.pos.x < (this.x + this.ancho/3)) && (pelota.pos.x > (this.x + 2 * (this.ancho / 3))) ) {
+            return false
 
-                if (pelota.vector.x > 0) {
+        } else if ( parseInt(pelota.pos.y) > parseInt(this.y + this.alto) ) {
 
-                    pelota.pos.x = this.x + pelota.lado + 1;
-
-                } else {
-
-                    pelota.pos.x = this.x + this.ancho + 1;
-
-                }
-
-            }
-
-            if (pelota.pos.y + pelota.lado > this.y - 2 && pelota.pos.y + pelota.lado < this.y) {
-                
-                pelota.pos.y = this.y - 3 + pelota.lado;
-                pelota.vector.y *= -1;
-
-            } else if (pelota.pos.y < this.y + this.alto + 2 && pelota.pos.y > this.y + this.alto) {
-
-                pelota.pos.y = this.y + this.alto + 3;
-                pelota.vector.y *= -1;
-
-            } else {
-
-                return true;
-
-            }
+            return false
 
         }
+
+        return true;    
 
     }
 
     Barrera.prototype.dibujar = function (ctx) {
         
         ctx.fillStyle = "#999";
-        ctx.fillRect(this.x, this.y, this.ancho, this.alto);
+        ctx.fillRect(this.x - 6, this.y, this.ancho, this.alto);
     
     }
 
@@ -1862,7 +1872,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         if (Math.abs(x - pelota.pos.x) < 30) {
 
-            if (pelota.vecotr.x > 0) {
+            if (pelota.vector.x > 0) {
 
                 return x - 2 * pelota.lado;
 
@@ -2577,7 +2587,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     })
 
     pantallas.weepongType.mouseover(function(){
-
         for(var i = 0; i < properties.menus.doble.length; i++) {
             properties.menus.doble[i].attr('id', '');
         }
