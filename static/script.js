@@ -1,4 +1,4 @@
-wz.app.addScript(36, 'main', function(win, app, lang, params) {
+wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
 
     var pong;
     var scoreFirst      = $('.score-first', win);
@@ -25,12 +25,11 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     })();
     
     // METEMOS EL TEXTO EN LAS OPCIONES
-    canvasZone.width    = $('.weepong-canvas', win).width();
-    canvasZone.height   = $('.weepong-canvas', win).height();
+    /*canvasZone.width    = $('.weepong-canvas', win).width();
+    canvasZone.height   = $('.weepong-canvas', win).height();*/
 
     canvasZone.width    = win.innerWidth();
     canvasZone.height   = win.innerHeight() - 29;
-
 
     $('.weepong-selection-oneplayer', win).text(lang.onePlayer);
     $('.weepong-selection-twoplayers', win).text(lang.twoPlayers);
@@ -42,6 +41,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     $('.weepong-difficult-medium', win).text(lang.medium);
     $('.weepong-difficult-hard', win).text(lang.hard);
     $('.weepong-difficult-impossible', win).text(lang.impossible);
+    pauseText.text(lang.pause);
     
     $('.weepong-win', win).text(lang.win);
     $('.weepong-lose', win).text(lang.lose);
@@ -50,13 +50,11 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
     scoreFirst.css('left', win.width() / 3);
     scoreSecond.css('right', win.width() / 3 );
-    pauseText.text(lang.pause);
+
     pauseText.css({ x : ( ( canvasZone.width / 2 ) - ( pauseText.width() / 2 ) ), y : ( ( canvasZone.height / 2 ) - ( pauseText.height() / 2 ) ) });
     
     $('.weepong-win', win).css({ x : ( ( canvasZone.width / 2 ) - ( $('.weepong-win', win).width() / 2 ) ), y : ( ( canvasZone.height / 2 ) - ( $('.weepong-win', win).height() / 2 ) ) })
     $('.weepong-lose', win).css({ x : ( ( canvasZone.width / 2 ) - ( $('.weepong-lose', win).width() / 2 ) ), y : ( ( canvasZone.height / 2 ) - ( $('.weepong-lose', win).height() / 2 ) ) })
-    
-    $('.weepong-title', win).css('margin-left', (($('.weepong-canvas').width()/2) - $('.weepong-title').width()/4) + 'px');
 
     /*#####################################################################################################
     ##################################       CLASE PROPIEDADES       ######################################
@@ -314,8 +312,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         this.tipo = t;
         
         if (this.tipo === Tipos.AWESOME) {
+            
             this.events = new EventTrigger(this);
             this.events.init();
+
         }
 
         this.barreras = [];
@@ -714,12 +714,14 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     }
 
     Pelota.prototype.dibujar = function(contexto) {
+        
         contexto.fillStyle = this.color;
         contexto.fillRect(this.pos.x - this.lado/2, this.pos.y - this.lado/2, this.lado, this.lado);
     
     }
 
     Pelota.prototype.inicio = function(direccion) {
+        
         this.pos       = this.posIni;
         this.velocidad = this.velocidadIni;
         this.vector    = new Vector2D(direccion * this.velocidad, 0);
@@ -1548,9 +1550,19 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
             self.x = parseInt(Math.random() * ((canvasZone.width  * 0.75) - (canvasZone.width  * 0.25) + 1), 10) + (canvasZone.width  * 0.25);
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
-            self.tipo     = parseInt(Math.random() * self.events.length, 10);
-            self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
+            //self.tipo     = parseInt(Math.random() * self.events.length, 10);
+            self.tipo = 6;
+
+            if (self.tipo === 3 || self.tipo === 4) {
             
+                self.afectado = self.afects[parseInt(Math.random() * self.afects.length, 10)];
+            
+            } else {
+
+                self.afectado = 0;
+
+            }
+
             self.draw = true;
 
             properties.killBill = setTimeout(function(){
@@ -1683,12 +1695,12 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
                 selfEvent.initFunction();
 
-                properties.killidTimeout = setTimeout(function() {
+                /*properties.killidTimeout = setTimeout(function() {
                    
                     selfEvent.killFunction();
                     properties.activePower = null;
                     
-                }, selfEvent.duracion); 
+                }, selfEvent.duracion); */
 
             } else if (this.tipo === 7)  {
 
@@ -1862,7 +1874,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
     Barrera.prototype.dibujar = function (ctx) {
         
         ctx.fillStyle = "#999";
-        ctx.fillRect(this.x - 6, this.y, this.ancho, this.alto);
+        ctx.fillRect(this.x - 8, this.y, this.ancho, this.alto);
     
     }
 
@@ -2003,7 +2015,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
 
         .on('click', '.weepong-difficult-medium', function(){
             
-            transicionws.mediumMode();
+            transiciones.mediumMode();
 
         })
 
@@ -2443,8 +2455,77 @@ wz.app.addScript(36, 'main', function(win, app, lang, params) {
         })
 
         .on('wz-resize', function() {
-            
-            $('.weepong-title', win).css('margin-left', (($('.weepong-canvas').width()/2) - $('.weepong-title').width()/4) + 'px');
+
+            $('.weepong-canvas').css('border', 'none');
+
+            if ($('.weepong').height() != 550 && $('.weepong').width() != 865 ) {
+
+                if ( ( $('.weepong').height() % canvasZone.height === 0 ) && ( $('.weepong').width() % canvasZone.width === 0 ) ) {
+
+                    canvasZone.height = $('.weepong').height();
+                    canvasZone.width  = $('.weepong').width();
+
+                    $('.weepong-canvas').css('border', 'none');
+
+                } else {
+
+                    console.log(($('.weepong').width() - canvasZone.width) / 2);
+
+                    var heightComparation =  $('.weepong').height() / canvasZone.height;
+                    var widthComparation  =  $('.weepong').width() / canvasZone.width;
+
+                    $('.weepong-canvas').css('border-color', '#FFF');
+
+                    if (heightComparation < widthComparation) {
+
+                        $('.weepong-canvas').css('border-left', '1em solid white');
+                        $('.weepong-canvas').css('border-right', '1em solid white');
+
+                        $('.weepong-canvas').css('margin-right', (($('.weepong').width() - canvasZone.width) / 2) + 'px' );
+
+                        var newHeight = parseInt( canvasZone.height * heightComparation );
+                        var newWidth  = parseInt( ( newHeight * canvasZone.width ) / canvasZone.height );
+
+                        canvasZone.height = newHeight;
+                        canvasZone.width  = newWidth; 
+
+                    } else {
+
+                        $('.weepong-canvas').css('border-top', '1em solid white');
+                        $('.weepong-canvas').css('border-bottom', '1em solid white');
+
+                        $('.weepong-canvas').css('margin-bottom', (($('.weepong').height() - canvasZone.height) / 2) + 'px' );
+
+                        var newWidth  = parseInt( canvasZone.width * widthComparation );
+                        var newHeight = parseInt( ( newWidth * canvasZone.height ) / canvasZone.width );
+
+                        canvasZone.height = newHeight;
+                        canvasZone.width  = newWidth;
+
+                    }
+
+                    pong.palas[0].pos.x = 30;
+                    pong.palas[1].pos.x = canvasZone.width - 30;
+
+                    pong.palas[0].alto  = canvasZone.height/5;
+                    pong.palas[1].alto  = canvasZone.height/5;
+
+                }
+
+            } else {
+
+                canvasZone.height = $('.weepong').height();
+                canvasZone.width  = $('.weepong').width();
+
+                $('.weepong-canvas').css('border', 'none');
+
+                pong.palas[0].pos.x = 30;
+                pong.palas[1].pos.x = canvasZone.width - 30;
+
+                pong.palas[0].alto  = canvasZone.height/5;
+                pong.palas[1].alto  = canvasZone.height/5;
+
+            }
 
         })
         
