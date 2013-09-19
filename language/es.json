@@ -11,7 +11,7 @@
 	"easy"         		: "FACIL",
 	"medium"       		: "MEDIO",
 	"hard"         		: "DIFICIL",
-	"impossible"   		: "JODIDAMENTE IMPOSIBLE",
+	"impossible"   		: "IMPOSIBLE",
 	"pause"        		: "PAUSA",
 	"instructionsImage" : "https://static.weezeel.com/app/36/instrucciones.png"
 	

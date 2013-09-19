@@ -10,10 +10,11 @@
 .wz-win-menu {
 	width: 865px;
 	height: 29px;
+	float: left;
 }
 
 .wz-win-menu-group {
-	padding: 1px 20px 0px;
+	padding: 4px 20px 1px;
 }
 
 .weepong {
@@ -35,8 +36,11 @@
 }
 
 .weepong-pause{
-	font-size: 350%;
 	position: absolute;
+	font-size: 350%;
+	width: 100%;
+	float: left;
+	text-align: center;
 	display: none;
 }
 
@@ -55,7 +59,7 @@
 }
 
 .weepong-menu{
-	width: 865px;
+	width: 100%;
 	float: left;
 	text-align: center;
 }
@@ -63,6 +67,7 @@
 .weepong-container {
 	width: 865px;
 	float: left;
+	width: 100%;
 	text-align: center;
 }
 
@@ -71,6 +76,10 @@
 	border: 1px solid transparent;
 	font-size: 25px;
 	display: inline-block;
+}
+
+.weepong-container span:hover {
+	border: 1px solid #FFFFFF;
 }
 
 .weepong-selection {
@@ -112,17 +121,28 @@
 	font-size: 400%;
 	color: #fff;
 	margin-top: 10%;
+	width: 100%;
+	text-align: center;
+}
+
+.weepong-canvas {
+	display: none;
 }
 
 #sound {
+	height: 22px;
+	width: 27px;
 	position: absolute;
 	top: 10%;
 	right: 10%;
-	background: url('https://static.weezeel.com/app/36/sound.png');
-	height: 35px;
-	width: 35px;
+	background: url('https://staticbeta.weezeel.com/app/36/sound.png') no-repeat -27px 0;
+	background-size: 54px 22px;
+}
+
+#sound.off {
+	background-position: 0 0;
 }
 
 #selected {
-	border: 1px solid #FFF;
+	border: 1px solid #FFFFFF;
 }

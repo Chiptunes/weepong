@@ -1,29 +1,27 @@
-wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
-
     var pong;
     var scoreFirst      = $('.score-first', win);
     var scoreSecond     = $('.score-second', win);
     var pauseText       = $('.weepong-pause', win);
     var canvasZone      = $('.weepong-canvas',win)[0];
 
-    window.requestAnimationFrame = (function(){
+    requestAnimationFrame = (function(){
 
-        return  window.requestAnimationFrame       ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame    ||
+        return  requestAnimationFrame       ||
+                webkitRequestAnimationFrame ||
+                mozRequestAnimationFrame    ||
                 function(callback){
-                    window.setTimeout(callback, 100/6);
+                    setTimeout(callback, 100/6);
                 };
 
     })();
 
-    window.cancelRequestAnimFrame = (function() {
+    cancelRequestAnimFrame = (function() {
         
-        return window.cancelAnimationFrame                 ||
-               window.webkitCancelRequestAnimationFrame    ||
-               window.mozCancelRequestAnimationFrame       ||
-               window.oCancelRequestAnimationFrame         ||
-               window.msCancelRequestAnimationFrame        ||
+        return cancelAnimationFrame                 ||
+               webkitCancelRequestAnimationFrame    ||
+               mozCancelRequestAnimationFrame       ||
+               oCancelRequestAnimationFrame         ||
+               msCancelRequestAnimationFrame        ||
         clearTimeout
 
     })();
@@ -236,7 +234,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
         pantallas.weepongCanvas.css('display', 'block');
         scoreFirst.css('display', 'block');
         scoreSecond.css('display', 'block');
-        pong = new Pong(5, 5, 600, 600, 25, Tipos.NORMAL);
+        pong = new Pong(5, 5, 600, 600, 75, Tipos.NORMAL);
         properties.init = true;
         properties.menu = false;
         pong.mode = Modes.MATCH;
@@ -256,7 +254,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
         pantallas.weepongCanvas.css('display', 'block');
         scoreFirst.css('display', 'block');
         scoreSecond.css('display', 'block');
-        pong = new Pong(5, 5, 600, 600, 25, Tipos.AWESOME);
+        pong = new Pong(5, 5, 600, 600, 75, Tipos.AWESOME);
         properties.init = true;
         properties.menu = false;
         pong.mode = Modes.MATCH;
@@ -300,7 +298,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
     
     function Pong (lp1, lp2, v1, v2, iv, t) {
         
-        scoreFirst.css('left', win.width()/3);
+        scoreFirst.css(  'left', win.width()/3);
         scoreSecond.css( 'right', win.width()/3);
         this.contexto = canvasZone.getContext('2d');
         this.palas  = [new Pala(30, lp1, v1), new Pala(canvasZone.width - 30, lp2, v2)];
@@ -347,8 +345,6 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
     }
 
     Pong.prototype.back = function () {
-
-        console.log('llamado');
         
         this.contexto.clearRect(0, 0, canvasZone.width, canvasZone.height);
         
@@ -712,7 +708,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
         
         // PROPIEDADES
         this.posIni = new Vector2D(canvasZone.width / 2, canvasZone.height / 2);
-        this.posIni = this.posIni.rotar(20);
+        this.posIni = this.posIni.rotar(5);
         this.pos;
         this.pong = pong;
 
@@ -1381,15 +1377,19 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
 
                 properties.killidInterval = setInterval(function(){
                     
-                    if(self.pong.pelota.vector.y < 200) {
-                        
-                        if (self.pong.pelota.vector.y > -200) self.pong.pelota.vector.y  = angles[Math.floor(Math.random() * angles.length)]
-                        
-                        self.pong.pelota.vector.y = angles[Math.floor(Math.random() * angles.length)];
-                        self.pong.pelota.vector.y *= -1
-                    }
+                    if (self.pelota.vector) {
 
-                    self.pong.pelota.vector.y *= -1
+                        if(self.pong.pelota.vector.y < 200) {
+                            
+                            if (self.pong.pelota.vector.y > -200) self.pong.pelota.vector.y  = angles[Math.floor(Math.random() * angles.length)]
+                            
+                            self.pong.pelota.vector.y = angles[Math.floor(Math.random() * angles.length)];
+                            self.pong.pelota.vector.y *= -1
+                        }
+
+                        self.pong.pelota.vector.y *= -1
+
+                    }
 
                 }, 700);
 
@@ -1573,7 +1573,7 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
             self.y = parseInt(Math.random() * ((canvasZone.height * 0.8) - (canvasZone.height * 0.2) + 1), 10) + (canvasZone.height * 0.2);
             
             self.tipo     = parseInt(Math.random() * self.events.length, 10);
-
+            
             if (self.pong.pelota.velocidad >= 2000 && self.tipo === 6 ) {
 
                 self.tipo += 7;
@@ -2614,10 +2614,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
         .on('click', '#sound', function() {
             if (properties.sound) {
                 properties.sound = false;
-                $('#sound').css('background-image', 'url(https://static.weezeel.com/app/36/nosound.png)');
+                $('#sound').addClass( 'off' );
             } else if (!properties.sound) {
                 properties.sound = true;
-                $('#sound').css('background-image', 'url(https://static.weezeel.com/app/36/sound.png)');
+                $('#sound').removeClass( 'off' );
             }
         })  
 
@@ -2755,5 +2755,3 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
         properties.menus.doble[1].mouseover(function() { properties.select = 1; properties.menus.doble[properties.select].attr('id', 'selected'); })
 
     });
-        
-});
