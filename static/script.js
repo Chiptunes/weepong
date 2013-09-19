@@ -1,29 +1,27 @@
-wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
-
     var pong;
     var scoreFirst      = $('.score-first', win);
     var scoreSecond     = $('.score-second', win);
     var pauseText       = $('.weepong-pause', win);
     var canvasZone      = $('.weepong-canvas',win)[0];
 
-    window.requestAnimationFrame = (function(){
+    requestAnimationFrame = (function(){
 
-        return  window.requestAnimationFrame       ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame    ||
+        return  requestAnimationFrame       ||
+                webkitRequestAnimationFrame ||
+                mozRequestAnimationFrame    ||
                 function(callback){
-                    window.setTimeout(callback, 100/6);
+                    setTimeout(callback, 100/6);
                 };
 
     })();
 
-    window.cancelRequestAnimFrame = (function() {
+    cancelRequestAnimFrame = (function() {
         
-        return window.cancelAnimationFrame                 ||
-               window.webkitCancelRequestAnimationFrame    ||
-               window.mozCancelRequestAnimationFrame       ||
-               window.oCancelRequestAnimationFrame         ||
-               window.msCancelRequestAnimationFrame        ||
+        return cancelAnimationFrame                 ||
+               webkitCancelRequestAnimationFrame    ||
+               mozCancelRequestAnimationFrame       ||
+               oCancelRequestAnimationFrame         ||
+               msCancelRequestAnimationFrame        ||
         clearTimeout
 
     })();
@@ -2616,10 +2614,10 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
         .on('click', '#sound', function() {
             if (properties.sound) {
                 properties.sound = false;
-                $('#sound').css('background-image', 'url(https://static.weezeel.com/app/36/nosound.png)');
+                $('#sound').addClass( 'off' );
             } else if (!properties.sound) {
                 properties.sound = true;
-                $('#sound').css('background-image', 'url(https://static.weezeel.com/app/36/sound.png)');
+                $('#sound').removeClass( 'off' );
             }
         })  
 
@@ -2757,5 +2755,3 @@ wz.app.addScript(36, 'main', function(win, app, lang, params, wql) {
         properties.menus.doble[1].mouseover(function() { properties.select = 1; properties.menus.doble[properties.select].attr('id', 'selected'); })
 
     });
-        
-});
