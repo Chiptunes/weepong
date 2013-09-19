@@ -14,7 +14,7 @@
 }
 
 .wz-win-menu-group {
-	padding: 1px 20px 0px;
+	padding: 4px 20px 1px;
 }
 
 .weepong {
@@ -130,12 +130,17 @@
 }
 
 #sound {
+	height: 22px;
+	width: 27px;
 	position: absolute;
 	top: 10%;
 	right: 10%;
-	background: url('https://static.weezeel.com/app/36/sound.png');
-	height: 35px;
-	width: 35px;
+	background: url('https://staticbeta.weezeel.com/app/36/sound.png') no-repeat -27px 0;
+	background-size: 54px 22px;
+}
+
+#sound.off {
+	background-position: 0 0;
 }
 
 #selected {
