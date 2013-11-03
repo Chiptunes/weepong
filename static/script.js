@@ -1,3 +1,5 @@
+
+    var win             = $(this);
     var pong;
     var scoreFirst      = $('.score-first', win);
     var scoreSecond     = $('.score-second', win);
@@ -22,7 +24,7 @@
                mozCancelRequestAnimationFrame       ||
                oCancelRequestAnimationFrame         ||
                msCancelRequestAnimationFrame        ||
-        clearTimeout
+        clearTimeout;
 
     })();
     
