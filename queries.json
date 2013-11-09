@@ -1,10 +1,5 @@
 {
-<<<<<<< HEAD
 	"setUser": "INSERT INTO scores ( user, score ) VALUES( @userId , ? )",
 	"setHigh": "UPDATE scores SET score=? WHERE user=@userId ",
 	"getUser": "SELECT * FROM scores WHERE user=@userId"
-=======
-	"setUser": "",
-	"setHigh": ""
->>>>>>> 362e3184c9ef8a4c13b4ef32122e36b45ab3028a
 }

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {
 
 	"onePlayer"    		: "1 JUGADOR",
@@ -18,23 +17,4 @@
 	"pause"        		: "PAUSA",
 	"instructionsImage" : "https://static.weezeel.com/app/36/instrucciones.png"
 	
-=======
-{
-
-	"onePlayer"    		: "1 JUGADOR",
-	"twoPlayers"   		: "2 JUGADORES",
-	"win"				: "¡VICTORIA!",
-	"lose"				: "PERDISTE",
-	"practice"     		: "PRACTICAR",
-	"instructions" 		: "INSTRUCCIONES",
-	"classic"      		: "MODO CLASICO",
-	"awesome"        	: "MODO AWESOME",
-	"easy"         		: "FACIL",
-	"medium"       		: "MEDIO",
-	"hard"         		: "DIFICIL",
-	"impossible"   		: "IMPOSIBLE",
-	"pause"        		: "PAUSA",
-	"instructionsImage" : "https://static.weezeel.com/app/36/instrucciones.png"
-	
->>>>>>> 362e3184c9ef8a4c13b4ef32122e36b45ab3028a
 }
