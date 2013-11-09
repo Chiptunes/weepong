@@ -32,6 +32,7 @@
                 "main" : {
                     
                     "template" : "main.html",
+<<<<<<< HEAD
 
                     "maxizable" : true,
                     "resizable" : false,
@@ -71,9 +72,21 @@
                 "css"    : [],
                 "script" : [],
                 "start"  : []
+=======
 
-            },
+                    "maxizable" : true,
+                    "resizable" : false,
 
+                    "width"  : {
+
+                        "default" : 865,
+                        "min"     : 0,
+                        "max"     : 0
+>>>>>>> 362e3184c9ef8a4c13b4ef32122e36b45ab3028a
+
+                    },
+
+<<<<<<< HEAD
             "view" : {
 
                 "main" : {
@@ -98,9 +111,22 @@
                 "css"    : [],
                 "script" : [],
                 "start"  : []
+=======
+                    "height" : {
 
-            },
+                        "default" : 550,
+                        "min"     : 0,
+                        "max"     : 0
+>>>>>>> 362e3184c9ef8a4c13b4ef32122e36b45ab3028a
 
+                    },
+
+                    "css"    : ["style.css"],
+                    "script" : ["script.js"]
+
+                }
+
+<<<<<<< HEAD
             "view" : {
 
                 "main" : {
@@ -111,6 +137,8 @@
 
                 }
 
+=======
+>>>>>>> 362e3184c9ef8a4c13b4ef32122e36b45ab3028a
 
             }
 

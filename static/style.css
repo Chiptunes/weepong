@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .wz-win{
 	background: #000;
 }
@@ -150,4 +151,153 @@
 
 #selected {
 	border: 1px solid #FFFFFF;
+=======
+.wz-win{
+	background: #000;
+}
+
+.wz-win *{
+	font-family: 'Press Start 2P',cursive;
+	color: #FFF;
+}
+
+.wz-win-menu {
+	width: 865px;
+	height: 29px;
+	float: left;
+}
+
+.wz-win-menu-group {
+	padding: 4px 20px 1px;
+}
+
+.weepong {
+
+	width: 865px;
+	height: 520px;
+	float: left;
+	position: relative;
+
+}
+
+.weepong-score{
+
+	font-size: 320%;
+	position: absolute;
+	top: 15px;
+	display: none;
+
+}
+
+.weepong-pause{
+	position: absolute;
+	font-size: 350%;
+	width: 100%;
+	float: left;
+	text-align: center;
+	display: none;
+}
+
+.weepong-win {
+	font-size: 350%;
+	color: #fff;
+	display: none;
+	position: absolute;
+}
+
+.weepong-lose {
+	font-size: 350%;
+	color: #fff;
+	display: none;	
+	position: absolute;
+}
+
+.weepong-menu{
+	width: 100%;
+	float: left;
+	text-align: center;
+}
+
+.weepong-container {
+	width: 865px;
+	float: left;
+	width: 100%;
+	text-align: center;
+}
+
+.weepong-container span {
+	padding: 12px 22px;
+	border: 1px solid transparent;
+	font-size: 25px;
+	display: inline-block;
+}
+
+.weepong-container span:hover {
+	border: 1px solid #FFFFFF;
+}
+
+.weepong-selection {
+	height: 324px;
+	padding: 98px 0px;
+	display: block;
+}
+
+.weepong-mode {
+	height: 162px;
+	padding: 179px 0px;
+	display: none;
+}
+
+.weepong-type {
+	height: 162px;
+	padding: 179px 0px;
+	display: none;
+}
+
+.weepong-difficult {
+	height: 324px;
+	padding: 98px 0px;
+	display: none;
+}
+
+.weepong-instructions { 
+	height: 446px;
+	padding: 37px 0px;
+	display: none;
+}
+
+.weepong-instructions img {
+	display: inline-block;
+}
+
+.weepong-title {
+	display: block;
+	font-size: 400%;
+	color: #fff;
+	margin-top: 10%;
+	width: 100%;
+	text-align: center;
+}
+
+.weepong-canvas {
+	display: none;
+}
+
+#sound {
+	height: 22px;
+	width: 27px;
+	position: absolute;
+	top: 10%;
+	right: 10%;
+	background: url('https://staticbeta.weezeel.com/app/36/sound.png') no-repeat -27px 0;
+	background-size: 54px 22px;
+}
+
+#sound.off {
+	background-position: 0 0;
+}
+
+#selected {
+	border: 1px solid #FFFFFF;
+>>>>>>> 362e3184c9ef8a4c13b4ef32122e36b45ab3028a
 }
