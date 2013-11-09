@@ -1,0 +1,14 @@
+#up-button {
+	float: left;
+	background: #333;
+}
+
+#down-button {
+	float: right;
+	background: #0f0;
+}
+
+.button {
+	height: 100%;
+	width: 50%;
+}

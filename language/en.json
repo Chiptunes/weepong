@@ -2,6 +2,8 @@
 	
 	"onePlayer"    		: "1 PLAYER START",
 	"twoPlayers"   		: "2 PLAYER START",
+	"local"				: "PLAY LOCAl",
+	"multiplayer"		: "PLAY ONLINE",
 	"win"				: "YOU WIN!",
 	"lose"				: "YOU LOSE",
 	"practice" 	   		: "PRACTICE",
@@ -11,7 +13,7 @@
 	"easy" 		   		: "EASY",
 	"medium" 	   		: "MEDIUM",
 	"hard" 		   		: "HARD",
-	"impossible"   		: "FUCKING IMPOSSIBLE",
+	"impossible"   		: "IMPOSSIBLE",
 	"pause" 	      	: "PAUSE",
 	"instructionsImage" : "https://static.weezeel.com/app/36/instructions.png"
 

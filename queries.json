@@ -1,0 +1,5 @@
+{
+	"setUser": "INSERT INTO scores ( user, score ) VALUES( @userId , ? )",
+	"setHigh": "UPDATE scores SET score=? WHERE user=@userId ",
+	"getUser": "SELECT * FROM scores WHERE user=@userId"
+}

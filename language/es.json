@@ -2,6 +2,8 @@
 
 	"onePlayer"    		: "1 JUGADOR",
 	"twoPlayers"   		: "2 JUGADORES",
+	"local"				: "JUGAR LOCAL",
+	"multiplayer"		: "JUGAR ONLINE",
 	"win"				: "¡VICTORIA!",
 	"lose"				: "PERDISTE",
 	"practice"     		: "PRACTICAR",
@@ -11,7 +13,7 @@
 	"easy"         		: "FACIL",
 	"medium"       		: "MEDIO",
 	"hard"         		: "DIFICIL",
-	"impossible"   		: "JODIDAMENTE IMPOSIBLE",
+	"impossible"   		: "IMPOSIBLE",
 	"pause"        		: "PAUSA",
 	"instructionsImage" : "https://static.weezeel.com/app/36/instrucciones.png"
 	
