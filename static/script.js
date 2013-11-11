@@ -2849,11 +2849,16 @@
         var data = data[0][0];
         var eventType = data.eventType;
 
-        if ( eventType == 'move' ) {
+        if ( eventType === 'move' ) {
 
-            if ( lastEvent === 0 ) lastEvent = data.time;
+            if ( data.time > lastEvent ) {
 
-            if ( data.time >= lastEvent ) {
+                keys1     = ( !data.value ) ? [] : [ data.value ];
+                lastEvent = data.time;
+
+            }
+
+        }
 
                 keys1 = ( !data.value ) ? [] : [ data.value ];
 

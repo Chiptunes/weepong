@@ -19,7 +19,7 @@ up.on('touchstart', function () {
 
 		remote.send({
 			eventType: 'move',
-			time: new Date(),
+			time: Date.now(),
 			value: events[0]
 		});
 
@@ -31,7 +31,7 @@ up.on('touchend', function () {
 
 	remote.send({
 		eventType: 'move',
-		time: new Date(),
+		time: Date.now(),
 		value: events[0]
 	});
 
@@ -43,7 +43,7 @@ down.on('touchstart', function () {
 		
 		remote.send({
 			eventType: 'move',
-			time: new Date(),
+			time: Date.now(),
 			value: events[0]
 		});
 
@@ -55,7 +55,7 @@ down.on('touchend', function () {
 
 		remote.send({
 			eventType: 'move',
-			time: new Date(),
+			time: Date.now(),
 			value: events[0]
 		});
 
