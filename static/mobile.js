@@ -4,6 +4,7 @@ var win = $(this);
 
 // GAME DEFINITION BEIBE 
 // ******************************
+var trackpad = $('.trackpad', win );
 var up 		 = $('.button-up', win);
 var down	 = $('.button-down', win);
 
@@ -13,7 +14,49 @@ var events  = [];
 // UP:    1
 // DOWN:  2
 
-up.on('touchstart', function () {
+trackpad
+.on( 'touchstart', function(e){
+	e.preventDefault();
+})
+.on( 'tap', function(){
+	
+	remote.send({
+		eventType: 'trackpad',
+		time: Date.now(),
+		value: 'tap'
+	});
+
+})
+.on( 'swipeUp', function(){
+	
+	remote.send({
+		eventType: 'trackpad',
+		time: Date.now(),
+		value: 'swipeUp'
+	});
+
+})
+.on( 'swipeDown', function(){
+	
+	remote.send({
+		eventType: 'trackpad',
+		time: Date.now(),
+		value: 'swipeDown'
+	});
+
+})
+.on( 'swipeLeft', function(){
+	
+	remote.send({
+		eventType: 'trackpad',
+		time: Date.now(),
+		value: 'swipeLeft'
+	});
+
+});
+
+up
+.on( 'touchstart', function () {
 		
 		events.unshift('up');
 
@@ -23,9 +66,8 @@ up.on('touchstart', function () {
 			value: events[0]
 		});
 
-});
-
-up.on('touchend', function () {
+})
+.on( 'touchend', function () {
 		
 	events.splice( events.indexOf('up'), 1 );
 
@@ -37,7 +79,8 @@ up.on('touchend', function () {
 
 });
 
-down.on('touchstart', function () {
+down
+.on( 'touchstart', function () {
 		
 		events.unshift('down');
 		
@@ -47,9 +90,8 @@ down.on('touchstart', function () {
 			value: events[0]
 		});
 
-});
-
-down.on('touchend', function () {
+})
+.on( 'touchend', function () {
 
 		events.splice( events.indexOf('down'), 1 );
 

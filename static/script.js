@@ -2846,6 +2846,8 @@
 
     win.on( 'remoteMessage', function( e, info, data ){
 
+        console.log( data );
+
         var data = data[0][0];
         var eventType = data.eventType;
 
@@ -2860,7 +2862,12 @@
 
         }
 
-                keys1 = ( !data.value ) ? [] : [ data.value ];
+        if( eventType === 'trackpad' ){
+            
+            if ( data.time > lastEvent ) {
+
+                console.log( data.value );
+                lastEvent = data.time;
 
             }
 
