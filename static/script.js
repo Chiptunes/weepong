@@ -122,10 +122,14 @@
         this.difficult;
 
         this.menus = {
-                        "main":   [$('.weepong-selection-oneplayer', win), $('.weepong-selection-twoplayers', win), $('.weepong-selection-practice', win), $('.weepong-selection-instructions', win)],
-                        "single": [$('.weepong-difficult-easy', win), $('.weepong-difficult-medium', win), $('.weepong-difficult-hard', win), $('.weepong-difficult-impossible', win)],
-                        "doble":  [$('.weepong-type-normal', win), $('.weepong-type-awesome', win)]
-                    }
+
+            main   : [ $('.weepong-selection-oneplayer', win), $('.weepong-selection-twoplayers', win), $('.weepong-selection-practice', win), $('.weepong-selection-instructions', win) ],
+            single : [ $('.weepong-difficult-easy', win), $('.weepong-difficult-medium', win), $('.weepong-difficult-hard', win), $('.weepong-difficult-impossible', win) ],
+            doble  : [ $('.weepong-type-normal', win), $('.weepong-type-awesome', win) ]
+
+        };
+
+        remote.send('menu');
     
     }
 
@@ -198,7 +202,7 @@
         properties.difficult = 'easy';
         pong = new Pong(4, 4, 500, 400, 15, Tipos.NORMAL);
         properties.init = true;
-        properties.menu = false;
+        properties.menu = false; remote.send('game');
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -215,7 +219,7 @@
         properties.difficult = 'medium'
         pong = new Pong(4, 3, 500, 500, 25, Tipos.NORMAL);
         properties.init = true;
-        properties.menu = false;
+        properties.menu = false; remote.send('game');
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -232,7 +236,7 @@
             properties.difficult = 'difficult';
             pong = new Pong(5, 4, 500, 500, 35, Tipos.NORMAL);
             properties.init = true;
-            properties.menu = false;
+            properties.menu = false; remote.send('game');
             pong.mode = Modes.MATCH;
             pong.loop();
 
@@ -248,7 +252,7 @@
         $('#sound').css('display', 'none');
         pong = new Pong(4, 4, 550, 600, 40, Tipos.NORMAL);
         properties.init = true;
-        properties.menu = false;
+        properties.menu = false; remote.send('game');
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -267,7 +271,7 @@
         scoreSecond.css('display', 'block');
         pong = new Pong(5, 5, 600, 600, 75, Tipos.NORMAL);
         properties.init = true;
-        properties.menu = false;
+        properties.menu = false; remote.send('game');
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -287,7 +291,7 @@
         scoreSecond.css('display', 'block');
         pong = new Pong(5, 5, 600, 600, 75, Tipos.AWESOME);
         properties.init = true;
-        properties.menu = false;
+        properties.menu = false; remote.send('game');
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -306,7 +310,7 @@
         scoreSecond.css('display', 'block');
         pong = new Pong(5, 5, 600, 600, 25);
         properties.init = true;
-        properties.menu = false;
+        properties.menu = false; remote.send('game');
         pong.mode = Modes.PRACTICE;
         pong.practicar();
 
@@ -408,7 +412,7 @@
         $('.weepong-title').css('display', 'block');
         $('.weepong-canvas').css('display', 'none');
         $('.weepong-canvas').css('borde', 'none');
-        properties.menu = true;
+        properties.menu = true; remote.send('menu');
 
     }
 
@@ -533,7 +537,7 @@
             deltaLoop = (Date.now() - this.tiempoTranscurrido)/1000;
             this.tiempoTranscurrido = Date.now();
             
-            console.log(keys1[0]);
+            //console.log(keys1[0]);
 
                 if (keys1.length <= 0) {
                     
@@ -2433,7 +2437,7 @@
                 
                 pong.back();
                 pong = null;
-                properties.menu = true;
+                properties.menu = true; remote.send('menu');
                 properties.paused = false;
 
             } else {
@@ -2448,7 +2452,35 @@
 
             }
 
-        }
+        },
+
+        wDown : function(){
+            keys1.unshift('up');
+        },
+
+        wUp : function(){
+            
+            if(keys1.length > 0 && keys1[0] === 'up') {
+                keys1.shift();
+            } else if(keys1.length > 0 && keys1[1] === 'up') {
+                keys1.pop();
+            }
+
+        },
+
+        sDown : function(){
+            keys1.unshift('down');
+        },
+
+        sUp : function(){
+            
+            if(keys1.length > 0 && keys1[0] === 'down') {
+                keys1.shift();
+            } else if(keys1.length > 0 && keys1[1] === 'down') {
+                keys1.pop();
+            }
+ 
+        })
 
     };
 
@@ -2749,34 +2781,8 @@
         })  
 
         .key('esc', _handler.escDown )
-
-        .key('w', function(){
-
-            keys1.unshift('up');
-
-        }, null, function(){
-            
-            if(keys1.length > 0 && keys1[0] === 'up') {
-                keys1.shift();
-            } else if(keys1.length > 0 && keys1[1] === 'up') {
-                keys1.pop();
-            }
-
-        })
-
-        .key('s', function(){
-
-            keys1.unshift('down');
-
-        }, null, function(){
-            
-            if(keys1.length > 0 && keys1[0] === 'down') {
-                keys1.shift();
-            } else if(keys1.length > 0 && keys1[1] === 'down') {
-                keys1.pop();
-            }
-
-        })
+        .key('w', _handler.wDown, null, _handler.wUp )
+        .key('s', _handler.sDown, null, _handler.sUp )
 
         .key('ctrl + g', function(){
             
@@ -2864,16 +2870,35 @@
 
     win.on( 'remoteMessage', function( e, info, data ){
 
-        console.log( data );
-
-        var data = data[0][0];
+        var data      = data[ 0 ][ 0 ];
         var eventType = data.eventType;
 
-        if ( eventType === 'move' ) {
+        if ( eventType === 'keydown' ) {
 
             if ( data.time > lastEvent ) {
 
-                keys1     = ( !data.value ) ? [] : [ data.value ];
+                if( data.value === 'w' ){
+                    _handler.wDown();
+                }else{
+                    _handler.sDown();
+                }
+
+                lastEvent = data.time;
+
+            }
+
+        }
+
+        if( eventType === 'keyup' ) {
+
+            if ( data.time > lastEvent ) {
+
+                if( data.value === 'w' ){
+                    _handler.wUp();
+                }else{
+                    _handler.sUp();
+                }
+
                 lastEvent = data.time;
 
             }

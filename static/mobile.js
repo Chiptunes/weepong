@@ -1,14 +1,12 @@
 // GLOBAL DEFINITIONS BEIBE
 // ******************************
-var win = $(this);
+var win = $(this).addClass('menu');
 
 // GAME DEFINITION BEIBE 
 // ******************************
 var trackpad = $('.trackpad', win );
 var up 		 = $('.button-up', win);
 var down	 = $('.button-down', win);
-
-var events  = [];
 
 // EVENT NAME:
 // UP:    1
@@ -21,36 +19,36 @@ trackpad
 .on( 'tap', function(){
 	
 	remote.send({
-		eventType: 'trackpad',
-		time: Date.now(),
-		value: 'tap'
+		eventType : 'trackpad',
+		time      : Date.now(),
+		value     : 'tap'
 	});
 
 })
 .on( 'swipeUp', function(){
 	
 	remote.send({
-		eventType: 'trackpad',
-		time: Date.now(),
-		value: 'swipeUp'
+		eventType : 'trackpad',
+		time      : Date.now(),
+		value     : 'swipeUp'
 	});
 
 })
 .on( 'swipeDown', function(){
 	
 	remote.send({
-		eventType: 'trackpad',
-		time: Date.now(),
-		value: 'swipeDown'
+		eventType : 'trackpad',
+		time      : Date.now(),
+		value     : 'swipeDown'
 	});
 
 })
 .on( 'swipeLeft', function(){
 	
 	remote.send({
-		eventType: 'trackpad',
-		time: Date.now(),
-		value: 'swipeLeft'
+		eventType : 'trackpad',
+		time      : Date.now(),
+		value     : 'swipeLeft'
 	});
 
 });
@@ -58,48 +56,51 @@ trackpad
 up
 .on( 'touchstart', function () {
 		
-		events.unshift('up');
-
-		remote.send({
-			eventType: 'move',
-			time: Date.now(),
-			value: events[0]
-		});
+	remote.send({
+		eventType : 'keydown',
+		time      : Date.now(),
+		value     : 'w'
+	});
 
 })
 .on( 'touchend', function () {
-		
-	events.splice( events.indexOf('up'), 1 );
-
+	
 	remote.send({
-		eventType: 'move',
-		time: Date.now(),
-		value: events[0]
+		eventType : 'keyup',
+		time      : Date.now(),
+		value     : 'w'
 	});
 
 });
 
 down
 .on( 'touchstart', function () {
-		
-		events.unshift('down');
-		
-		remote.send({
-			eventType: 'move',
-			time: Date.now(),
-			value: events[0]
-		});
+				
+	remote.send({
+		eventType : 'keydown',
+		time      : Date.now(),
+		value     : 's'
+	});
 
 })
 .on( 'touchend', function () {
 
-		events.splice( events.indexOf('down'), 1 );
+	remote.send({
+		eventType : 'keyup',
+		time      : Date.now(),
+		value     : 's'
+	});
 
-		remote.send({
-			eventType: 'move',
-			time: Date.now(),
-			value: events[0]
-		});
+});
+
+win
+.on( 'tvMessage', function( e, info, data ){
+
+	if( data[ 0 ][ 0 ] === 'menu' ){
+		win.addClass('menu');
+	}else if( data[ 0 ][ 0 ] === 'game' ){
+		win.removeClass('menu');
+	}
 
 });
 

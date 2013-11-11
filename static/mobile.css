@@ -4,6 +4,16 @@
 	height: 100%;
 	background: #333;
 	box-shadow: inset #252525 0px 0px 10px 10px;
+	display: none;
+}
+
+.wz-win.menu .trackpad{
+	display: block;
+}
+
+.button-control{
+	width: 100%;
+	height: 100%;
 }
 
 .button{
