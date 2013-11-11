@@ -79,9 +79,8 @@
                 "main" : {
                     
                     "template" : "mainMobile.html",
-                    "orientation": "landscape",
-                    "css"    : ["mobile.css"],
-                    "script" : ["mobile.js"]
+                    "css"      : ["mobile.css"],
+                    "script"   : ["mobile.js"]
 
                 }
 

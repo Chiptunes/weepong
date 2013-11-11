@@ -4,8 +4,8 @@ var win = $(this);
 
 // GAME DEFINITION BEIBE 
 // ******************************
-var up 		= $('#up-button', win);
-var down	= $('#down-button', win);
+var up 		 = $('.button-up', win);
+var down	 = $('.button-down', win);
 
 var events  = [];
 
