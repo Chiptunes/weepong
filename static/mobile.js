@@ -55,12 +55,14 @@ trackpad
 
 up
 .on( 'touchstart', function () {
-		
+
 	remote.send({
 		eventType : 'keydown',
 		time      : Date.now(),
 		value     : 'w'
 	});
+
+	$(this).addClass('active');
 
 })
 .on( 'touchend', function () {
@@ -70,6 +72,8 @@ up
 		time      : Date.now(),
 		value     : 'w'
 	});
+
+	$(this).removeClass('active');
 
 });
 
@@ -82,6 +86,8 @@ down
 		value     : 's'
 	});
 
+	$(this).addClass('active');
+
 })
 .on( 'touchend', function () {
 
@@ -90,6 +96,8 @@ down
 		time      : Date.now(),
 		value     : 's'
 	});
+
+	$(this).removeClass('active');
 
 });
 
