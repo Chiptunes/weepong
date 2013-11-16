@@ -2480,6 +2480,90 @@
                 keys1.pop();
             }
  
+        },
+
+        pDown : function(){
+            
+            if(!properties.menu){
+                
+                if(properties.paused) {
+                        
+                    $('#sound').css('display', 'none');
+                    pauseText.css('display', 'none');
+                    properties.paused = false;
+
+                    pong.events.init(); // To Do -> Tira error
+
+                    if (properties.powerStarts > 0) {
+
+                        if (properties.powerTime < 10000) {
+
+                            setTimeout(function() {
+
+                                self.draw       = false;
+                                self.tipo       = false;
+                                self.x          = null;
+                                self.y          = null;
+
+                            }, 10000 - properties.powerTime);
+
+                        } 
+
+                    }
+
+                    if (properties.activePower) {
+
+                        if (pong.events.events[properties.activePower].timeout) {
+
+                            if (pong.events.events[properties.activePower].interval) pong.events.events[properties.activePower].initFunction();
+
+                            properties.killidTimeout = setTimeout(function() {
+
+                                pong.events.events[properties.activePower].killFunction(pong.events.events[properties.activePower]);
+                                clearTimeout(properties.killidTimeout);
+
+                            }, properties.eventTime);
+
+                        }
+
+                    }
+
+                } else {
+                   
+                    clearInterval(properties.killInit); 
+                    clearTimeout(properties.killBill);
+
+                    properties.powerTime = Date.now() - properties.powerStarts;
+
+                    $('#sound').css('display', 'block');
+                    pauseText.css('display', 'block');
+                    properties.paused = true;
+
+                    properties.powerTime = 20000 - (Date.now() - properties.powerStarts);   
+
+                    if (properties.activePower) {
+
+                        if (pong.events.events[properties.activePower].timeout) {
+
+                            clearTimeout(properties.killidTimeout);
+                            
+                            var time = Date.now() - properties.eventStarts;
+                            properties.eventTime = pong.events.events[properties.activePower].duracion - time;
+
+                            if(pong.events.events[properties.activePower].interval) {
+                                
+                                clearInterval(properties.killidInterval);
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            
+            }
+
         }
 
     };
@@ -2592,91 +2676,7 @@
         
         })
 
-        .key('p', function(){
-            
-            if(!properties.menu){
-                
-                if(properties.paused) {
-                        
-                    $('#sound').css('display', 'none');
-                    pauseText.css('display', 'none');
-                    properties.paused = false;
-
-                    pong.events.init();
-
-                    if (properties.powerStarts > 0) {
-
-                        if (properties.powerTime < 10000) {
-
-                            setTimeout(function() {
-
-                                self.draw       = false;
-                                self.tipo       = false;
-                                self.x          = null;
-                                self.y          = null;
-
-                            }, 10000 - properties.powerTime);
-
-                        } 
-
-                    }
-
-                    if (properties.activePower) {
-
-                        if (pong.events.events[properties.activePower].timeout) {
-
-                            if (pong.events.events[properties.activePower].interval) pong.events.events[properties.activePower].initFunction();
-
-                            properties.killidTimeout = setTimeout(function() {
-
-                                pong.events.events[properties.activePower].killFunction(pong.events.events[properties.activePower]);
-                                clearTimeout(properties.killidTimeout);
-
-                            }, properties.eventTime);
-
-                        }
-
-                    }
-
-                } else {
-                   
-                    clearInterval(properties.killInit); 
-                    clearTimeout(properties.killBill);
-
-                    properties.powerTime = Date.now() - properties.powerStarts;
-
-                    $('#sound').css('display', 'block');
-                    pauseText.css('display', 'block');
-                    properties.paused = true;
-
-                    properties.powerTime = 20000 - (Date.now() - properties.powerStarts);   
-
-                    if (properties.activePower) {
-
-                        if (pong.events.events[properties.activePower].timeout) {
-
-                            clearTimeout(properties.killidTimeout);
-                            
-                            var time = Date.now() - properties.eventStarts;
-                            properties.eventTime = pong.events.events[properties.activePower].duracion - time;
-
-                            if(pong.events.events[properties.activePower].interval) {
-                                
-                                clearInterval(properties.killidInterval);
-
-                            }
-
-                        }
-
-                    }
-
-                }
-            
-            }
-
-        })
-
-        // teclas
+        .key('p', _handler.pDown )
         .key('up', _handler.upDown, null, _handler.upUp )
         .key('down', _handler.downDown, null, _handler.downUp )
         .key('enter', _handler.enterDown )
@@ -2868,7 +2868,8 @@
 
     });
 
-    win.on( 'remoteMessage', function( e, info, data ){
+    win
+    .on( 'remoteMessage', function( e, info, data ){
 
         var data      = data[ 0 ][ 0 ];
         var eventType = data.eventType;
@@ -2931,4 +2932,12 @@
 
         }
 
+    })
+
+    .on( 'wz-minimize', function(){
+        _handler.pDown();
+    })
+
+    .on( 'wz-unminimize', function(){
+        _handler.pDown();
     });
