@@ -2871,9 +2871,6 @@
     win
     .on( 'remoteMessage', function( e, info, data ){
 
-        console.log( arguments );
-
-        var data      = data[ 0 ][ 0 ];
         var eventType = data.eventType;
 
         if ( eventType === 'keydown' ) {

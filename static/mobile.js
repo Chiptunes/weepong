@@ -102,11 +102,11 @@ down
 });
 
 win
-.on( 'tvMessage', function( e, info, data ){
+.on( 'remoteMessage', function( e, info, data ){
 
-	if( data[ 0 ][ 0 ] === 'menu' ){
+	if( data === 'menu' ){
 		win.addClass('menu');
-	}else if( data[ 0 ][ 0 ] === 'game' ){
+	}else if( data === 'game' ){
 		win.removeClass('menu');
 	}
 
