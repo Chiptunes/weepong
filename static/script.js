@@ -1,12 +1,8 @@
-
-    var win             = $(this);
     var pong;
     var scoreFirst      = $('.score-first', win);
     var scoreSecond     = $('.score-second', win);
     var pauseText       = $('.weepong-pause', win);
     var canvasZone      = $('.weepong-canvas',win)[0];
-
-    var lastEvent       = 0;
 
     requestAnimationFrame = (function(){
 
@@ -32,8 +28,8 @@
     
     // METEMOS EL TEXTO EN LAS OPCIONES
 
-    canvasZone.width  = win.innerWidth();
-    canvasZone.height = win.innerHeight() - 29;
+    canvasZone.width    = win.innerWidth();
+    canvasZone.height   = win.innerHeight() - 29;
 
     $('.weepong-selection-oneplayer', win).text(lang.onePlayer);
     $('.weepong-selection-twoplayers', win).text(lang.twoPlayers);
@@ -57,15 +53,16 @@
 
     scoreFirst.css('left', win.width() / 3);
     scoreSecond.css('right', win.width() / 3 );
-    
+
     pauseText.css({ x : ( ( canvasZone.width / 2 ) - ( pauseText.width() / 2 ) ), y : ( ( canvasZone.height / 2 ) - ( pauseText.height() / 2 ) ) });
     
-    $('.weepong-win', win).css({ x : ( ( win.innerWidth() / 2 ) - ( $('.weepong-win', win).width() / 2 ) ), y : ( ( win.innerHeight() / 2 ) - ( $('.weepong-win', win).height() / 2 ) ) })
-    $('.weepong-lose', win).css({ x : ( ( win.innerWidth() / 2 ) - ( $('.weepong-lose', win).width() / 2 ) ), y : ( ( win.innerHeight() / 2 ) - ( $('.weepong-lose', win).height() / 2 ) ) })
+    $('.weepong-win', win).css({ x : ( ( canvasZone.width / 2 ) - ( $('.weepong-win', win).width() / 2 ) ), y : ( ( canvasZone.height / 2 ) - ( $('.weepong-win', win).height() / 2 ) ) })
+    $('.weepong-lose', win).css({ x : ( ( canvasZone.width / 2 ) - ( $('.weepong-lose', win).width() / 2 ) ), y : ( ( canvasZone.height / 2 ) - ( $('.weepong-lose', win).height() / 2 ) ) })
 
     /*#####################################################################################################
     ##################################       CLASE PROPIEDADES       ######################################
     #######################################################################################################*/
+
 
     function Direction() {
         
@@ -122,14 +119,10 @@
         this.difficult;
 
         this.menus = {
-
-            main   : [ $('.weepong-selection-oneplayer', win), $('.weepong-selection-twoplayers', win), $('.weepong-selection-practice', win), $('.weepong-selection-instructions', win) ],
-            single : [ $('.weepong-difficult-easy', win), $('.weepong-difficult-medium', win), $('.weepong-difficult-hard', win), $('.weepong-difficult-impossible', win) ],
-            doble  : [ $('.weepong-type-normal', win), $('.weepong-type-awesome', win) ]
-
-        };
-
-        remote.send('menu');
+                        "main":   [$('.weepong-selection-oneplayer', win), $('.weepong-selection-twoplayers', win), $('.weepong-selection-practice', win), $('.weepong-selection-instructions', win)],
+                        "single": [$('.weepong-difficult-easy', win), $('.weepong-difficult-medium', win), $('.weepong-difficult-hard', win), $('.weepong-difficult-impossible', win)],
+                        "doble":  [$('.weepong-type-normal', win), $('.weepong-type-awesome', win)]
+                    }
     
     }
 
@@ -202,7 +195,7 @@
         properties.difficult = 'easy';
         pong = new Pong(4, 4, 500, 400, 15, Tipos.NORMAL);
         properties.init = true;
-        properties.menu = false; remote.send('game');
+        properties.menu = false;
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -219,7 +212,7 @@
         properties.difficult = 'medium'
         pong = new Pong(4, 3, 500, 500, 25, Tipos.NORMAL);
         properties.init = true;
-        properties.menu = false; remote.send('game');
+        properties.menu = false;
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -236,7 +229,7 @@
             properties.difficult = 'difficult';
             pong = new Pong(5, 4, 500, 500, 35, Tipos.NORMAL);
             properties.init = true;
-            properties.menu = false; remote.send('game');
+            properties.menu = false;
             pong.mode = Modes.MATCH;
             pong.loop();
 
@@ -252,7 +245,7 @@
         $('#sound').css('display', 'none');
         pong = new Pong(4, 4, 550, 600, 40, Tipos.NORMAL);
         properties.init = true;
-        properties.menu = false; remote.send('game');
+        properties.menu = false;
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -271,7 +264,7 @@
         scoreSecond.css('display', 'block');
         pong = new Pong(5, 5, 600, 600, 75, Tipos.NORMAL);
         properties.init = true;
-        properties.menu = false; remote.send('game');
+        properties.menu = false;
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -291,7 +284,7 @@
         scoreSecond.css('display', 'block');
         pong = new Pong(5, 5, 600, 600, 75, Tipos.AWESOME);
         properties.init = true;
-        properties.menu = false; remote.send('game');
+        properties.menu = false;
         pong.mode = Modes.MATCH;
         pong.loop();
 
@@ -310,7 +303,7 @@
         scoreSecond.css('display', 'block');
         pong = new Pong(5, 5, 600, 600, 25);
         properties.init = true;
-        properties.menu = false; remote.send('game');
+        properties.menu = false;
         pong.mode = Modes.PRACTICE;
         pong.practicar();
 
@@ -412,7 +405,7 @@
         $('.weepong-title').css('display', 'block');
         $('.weepong-canvas').css('display', 'none');
         $('.weepong-canvas').css('borde', 'none');
-        properties.menu = true; remote.send('menu');
+        properties.menu = true;
 
     }
 
@@ -536,9 +529,7 @@
             this.finish();
             deltaLoop = (Date.now() - this.tiempoTranscurrido)/1000;
             this.tiempoTranscurrido = Date.now();
-            
-            //console.log(keys1[0]);
-
+                
                 if (keys1.length <= 0) {
                     
                     directions.player1 = Direccion.QUIETO;
@@ -2120,458 +2111,6 @@
 
     };
 
-    /*#####################################################################################################
-    ####################################    HANDLERS DE TECLAS    #########################################
-    #######################################################################################################*/
-    var _handler = {
-
-        upDown : function(){
-
-            if(properties.menu) {
-
-                if(pantallas.weepongSelection.css('display') === 'block') {
-
-                    if (properties.select > 0) {
-                        properties.select -= 1;
-                    } else if (properties.select === 0) {
-                        properties.select = properties.menus.main.length - 1;
-                    }
-
-                    for(var i = 0; i < properties.menus.main.length; i++) {
-                        properties.menus.main[i].attr('id', ' ');
-                    }  
-
-                    properties.menus.main[properties.select].attr('id', 'selected');
-
-                } else if(pantallas.weepongDifficult.css('display') === 'block' ) {
-
-                    if (properties.select > 0) {
-                        properties.select -= 1;
-                    } else if (properties.select === 0) {
-                        properties.select = properties.menus.single.length - 1;
-                    }
-
-                    for(var i = 0; i < properties.menus.single.length; i++) {
-                        properties.menus.single[i].attr('id', ' ');
-                    }  
-
-                    properties.menus.single[properties.select].attr('id', 'selected');
-
-                } else if(pantallas.weepongType.css('display') === 'block' ) {
-
-                    if (properties.select > 0) {
-                        properties.select -= 1;
-                    } else if (properties.select === 0) {
-                        properties.select = properties.menus.doble.length - 1;
-                    }
-
-                    for(var i = 0; i < properties.menus.doble.length; i++) {
-                        properties.menus.doble[i].attr('id', ' ');
-                    }  
-
-                    properties.menus.doble[properties.select].attr('id', 'selected');
-
-                }  
-
-            } else {
-                
-                if (pong.mode === Modes.MATCH) {
-                    
-                    if(properties.players === 2) {
-                        keys2.unshift('up');
-                    } else if (properties.players === 1) {
-                        keys1.unshift('up');
-                    }
-
-                } else if (pong.mode === Modes.PRACTICE) {
-                    keys1.unshift('up');
-                }
-
-            }
-
-        },
-
-        upUp : function(){
-            
-            if (properties.menu === false) {
-
-                if (pong.mode === Modes.MATCH) {
-                    
-                    if(properties.players === 2) {
-                        
-                        if(keys2.length > 0 && keys2[0] === 'up') {
-                            keys2.shift();
-                        } else if(keys2.length > 0 && keys2[1] === 'up') {
-                            keys2.pop();
-                        }
-
-                    } else if (properties.players === 1) {
-                        
-                        if(keys1.length > 0 && keys1[0] === 'up') {
-                            keys1.shift();
-                        } else if(keys1.length > 0 && keys1[1] === 'up') {
-                            keys1.pop();
-                        }
-
-                    }
-
-                } else if (pong.mode === Modes.PRACTICE) {
-                    
-                    if(keys1.length > 0 && keys1[0] === 'up') {
-                        keys1.shift();
-                    } else if(keys1.length > 0 && keys1[1] === 'up') {
-                        keys1.pop();
-                    }
-
-                }
-
-            }
-
-        },
-
-        downDown : function(){
-
-            if (properties.menu) {
-            
-                if(pantallas.weepongSelection.css('display') === 'block') {
-
-                    if (properties.select < properties.menus.main.length - 1) {
-                        properties.select += 1;
-                    } else if (properties.select === properties.menus.main.length - 1) {
-                        properties.select = 0;
-                    }
-
-                    for(var i = 0; i < properties.menus.main.length; i++) {
-                        properties.menus.main[i].attr('id', '');
-                    }  
-
-                    properties.menus.main[properties.select].attr('id', 'selected');
-
-                } else if(pantallas.weepongDifficult.css('display') === 'block' ) {
-
-                    if (properties.select < properties.menus.single.length - 1) {
-                        properties.select += 1;
-                    } else if (properties.select === properties.menus.single.length - 1) {
-                        properties.select = 0;
-                    }
-
-                    for(var i = 0; i < properties.menus.single.length; i++) {
-                        properties.menus.single[i].attr('id', '');
-                    }  
-
-                    properties.menus.single[properties.select].attr('id', 'selected');
-
-                } else if(pantallas.weepongType.css('display') === 'block' ) {
-
-                    if (properties.select < properties.menus.doble.length - 1) {
-                        properties.select += 1;
-                    } else if (properties.select === properties.menus.doble.length - 1) {
-                        properties.select = 0;
-                    }
-
-                    for(var i = 0; i < properties.menus.doble.length; i++) {
-                        properties.menus.doble[i].attr('id', '');
-                    }  
-
-                    properties.menus.doble[properties.select].attr('id', 'selected');
-
-                }  
-
-            } else {            
-                
-                if (pong.mode === Modes.MATCH) {
-                    
-                    if(properties.players === 2) {
-                        keys2.unshift('down');
-                    } else if (properties.players === 1) {
-                        keys1.unshift('down');
-                    }
-
-                } else if (pong.mode === Modes.PRACTICE) {
-                    keys1.unshift('down');
-                }
-
-            }
-
-        },
-
-        downUp : function(){
-                
-            if(properties.menu === false) {            
-                
-                if (pong.mode === Modes.MATCH) {
-                    
-                    if(properties.players === 2) {
-                        if(keys2.length > 0 && keys2[0] === 'down') {
-                            keys2.shift();
-                        } else if(keys2.length > 0 && keys2[1] === 'down') {
-                            keys2.pop();
-                        }
-                    } else if (properties.players === 1) {
-                        if(keys1.length > 0 && keys1[0] === 'down') {
-                            keys1.shift();
-                        } else if(keys1.length > 0 && keys1[1] === 'down') {
-                            keys1.pop();
-                        }
-                    }
-                
-                } else if (pong.mode === Modes.PRACTICE) {
-                
-                    if(keys1.length > 0 && keys1[0] === 'down') {
-                        keys1.shift();
-                    } else if(keys1.length > 0 && keys1[1] === 'down') {
-                        keys1.pop();
-                    }
-                
-                }
-
-            }
-
-        },
-
-        enterDown : function(){
-            
-            if(pantallas.weepongSelection.css('display') === 'block') {
-
-                for(var i = 0; i < properties.menus.main.length; i++) {
-                    properties.menus.main[i].attr('id', ' ');
-                }  
-
-                properties.menus.main[0].attr('id', 'selected');
-
-                if (properties.select === 0) {
-
-                    transiciones.toSinglePlayer();
-                     
-                    for(var i = 0; i < properties.menus.single.length; i++) {
-                        properties.menus.single[i].attr('id', ' ');
-                    } 
-
-                    properties.menus.single[0].attr('id', 'selected');
-                    properties.select = 0;
-
-                } else if (properties.select === 1) {
-
-                    transiciones.toMultiPlayer();                    
-
-                    for(var i = 0; i < properties.menus.doble.length; i++) {
-                        properties.menus.doble[i].attr('id', '');
-                    }  
-                    properties.menus.doble[0].attr('id', 'selected');
-                    properties.select = 0;
-
-                } else if (properties.select === 2) {
-
-                    properties.select = 0;
-                    transiciones.practiceMode();
-
-                } else if (properties.select === 3) {
-            
-                    properties.select = 0;
-                    transiciones.toInstructions();
-
-                }
-
-            } else if(pantallas.weepongDifficult.css('display') === 'block' ) {
-
-                for(var i = 0; i < properties.menus.single.length; i++) {
-                    
-                    properties.menus.single[i].attr('id', ' ');
-                }  
-
-                properties.menus.single[0].attr('id', 'selected');
-
-                if (properties.select === 0) {
-
-                    properties.select = 0;
-                    transiciones.easyMode();      
-
-                } else if (properties.select === 1) {
-
-                    properties.select = 0;
-                    transiciones.mediumMode();
-
-                } else if (properties.select === 2) {
-
-                    properties.select = 0;
-                    transiciones.hardMode();
-
-                } else if (properties.select === 3) {
-
-                    properties.select = 0;
-                    transiciones.impossibleMode();
-
-                }
-
-            } else if(pantallas.weepongType.css('display') === 'block' ) {
-
-                for(var i = 0; i < properties.menus.doble .length; i++) {
-                    properties.menus.doble[i].attr('id', '');
-                }  
-
-                properties.menus.doble[0].attr('id', 'selected');
-
-                if(properties.select === 0) {
-
-                    properties.select = 0;
-                    transiciones.normalMode();
-
-                } else if (properties.select === 1) {
-
-                    properties.select = 0;
-                    transiciones.awesomeMode();
-
-                }
-
-            } 
-
-        },
-
-        escDown : function(){
-            
-            properties.select = 0;
-
-            if ( pong && pong.mode && pong.mode == Modes.PRACTICE && pong.highscore ) wql.setHigh( [ pong.highscore ], function ( err ) { if (err) console.log( err ) });
-            
-            if (pong != undefined) {
-                
-                pong.back();
-                pong = null;
-                properties.menu = true; remote.send('menu');
-                properties.paused = false;
-
-            } else {
-                
-                pauseText.css('display', 'none');
-                pantallas.weepongDifficult.css('display', 'none');
-                pantallas.weepongType.css('display', 'none');
-                pantallas.weepongInstructions.css('display', 'none');
-                pantallas.weepongSelection.css('display', 'block');
-                $('.weepong-title').css('display', 'block');
-                pantallas.weepongInstructions.css('display', 'none');   
-
-            }
-
-        },
-
-        wDown : function(){
-            keys1.unshift('up');
-        },
-
-        wUp : function(){
-            
-            if(keys1.length > 0 && keys1[0] === 'up') {
-                keys1.shift();
-            } else if(keys1.length > 0 && keys1[1] === 'up') {
-                keys1.pop();
-            }
-
-        },
-
-        sDown : function(){
-            keys1.unshift('down');
-        },
-
-        sUp : function(){
-            
-            if(keys1.length > 0 && keys1[0] === 'down') {
-                keys1.shift();
-            } else if(keys1.length > 0 && keys1[1] === 'down') {
-                keys1.pop();
-            }
- 
-        },
-
-        pDown : function(){
-            
-            if(!properties.menu){
-                
-                if(properties.paused) {
-                        
-                    $('#sound').css('display', 'none');
-                    pauseText.css('display', 'none');
-                    properties.paused = false;
-
-                    pong.events.init(); // To Do -> Tira error
-
-                    if (properties.powerStarts > 0) {
-
-                        if (properties.powerTime < 10000) {
-
-                            setTimeout(function() {
-
-                                self.draw       = false;
-                                self.tipo       = false;
-                                self.x          = null;
-                                self.y          = null;
-
-                            }, 10000 - properties.powerTime);
-
-                        } 
-
-                    }
-
-                    if (properties.activePower) {
-
-                        if (pong.events.events[properties.activePower].timeout) {
-
-                            if (pong.events.events[properties.activePower].interval) pong.events.events[properties.activePower].initFunction();
-
-                            properties.killidTimeout = setTimeout(function() {
-
-                                pong.events.events[properties.activePower].killFunction(pong.events.events[properties.activePower]);
-                                clearTimeout(properties.killidTimeout);
-
-                            }, properties.eventTime);
-
-                        }
-
-                    }
-
-                } else {
-                   
-                    clearInterval(properties.killInit); 
-                    clearTimeout(properties.killBill);
-
-                    properties.powerTime = Date.now() - properties.powerStarts;
-
-                    $('#sound').css('display', 'block');
-                    pauseText.css('display', 'block');
-                    properties.paused = true;
-
-                    properties.powerTime = 20000 - (Date.now() - properties.powerStarts);   
-
-                    if (properties.activePower) {
-
-                        if (pong.events.events[properties.activePower].timeout) {
-
-                            clearTimeout(properties.killidTimeout);
-                            
-                            var time = Date.now() - properties.eventStarts;
-                            properties.eventTime = pong.events.events[properties.activePower].duracion - time;
-
-                            if(pong.events.events[properties.activePower].interval) {
-                                
-                                clearInterval(properties.killidInterval);
-
-                            }
-
-                        }
-
-                    }
-
-                }
-            
-            }
-
-        }
-
-    };
-
-    /*#####################################################################################################
-    ####################################         EVENTOS          #########################################
-    #######################################################################################################*/
-
     $(win)
 
         .on('click', '.weepong-selection-oneplayer', function(){
@@ -2676,10 +2215,391 @@
         
         })
 
-        .key('p', _handler.pDown )
-        .key('up', _handler.upDown, null, _handler.upUp )
-        .key('down', _handler.downDown, null, _handler.downUp )
-        .key('enter', _handler.enterDown )
+        .key('p', function(){
+            
+            if(!properties.menu){
+                
+                if(properties.paused) {
+                        
+                    $('#sound').css('display', 'none');
+                    pauseText.css('display', 'none');
+                    properties.paused = false;
+
+                    pong.events.init();
+
+                    if (properties.powerStarts > 0) {
+
+                        if (properties.powerTime < 10000) {
+
+                            setTimeout(function() {
+
+                                self.draw       = false;
+                                self.tipo       = false;
+                                self.x          = null;
+                                self.y          = null;
+
+                            }, 10000 - properties.powerTime);
+
+                        } 
+
+                    }
+
+                    if (properties.activePower) {
+
+                        if (pong.events.events[properties.activePower].timeout) {
+
+                            if (pong.events.events[properties.activePower].interval) pong.events.events[properties.activePower].initFunction();
+
+                            properties.killidTimeout = setTimeout(function() {
+
+                                pong.events.events[properties.activePower].killFunction(pong.events.events[properties.activePower]);
+                                clearTimeout(properties.killidTimeout);
+
+                            }, properties.eventTime);
+
+                        }
+
+                    }
+
+                } else {
+                   
+                    clearInterval(properties.killInit); 
+                    clearTimeout(properties.killBill);
+
+                    properties.powerTime = Date.now() - properties.powerStarts;
+
+                    $('#sound').css('display', 'block');
+                    pauseText.css('display', 'block');
+                    properties.paused = true;
+
+                    properties.powerTime = 20000 - (Date.now() - properties.powerStarts);   
+
+                    if (properties.activePower) {
+
+                        if (pong.events.events[properties.activePower].timeout) {
+
+                            clearTimeout(properties.killidTimeout);
+                            
+                            var time = Date.now() - properties.eventStarts;
+                            properties.eventTime = pong.events.events[properties.activePower].duracion - time;
+
+                            if(pong.events.events[properties.activePower].interval) {
+                                
+                                clearInterval(properties.killidInterval);
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            
+            }
+
+        })
+
+        // teclas
+
+        .key('up', function(){
+
+                if(properties.menu) {            
+
+                    if(pantallas.weepongSelection.css('display') === 'block') {
+
+                        if (properties.select > 0) {
+                            properties.select -= 1;
+                        } else if (properties.select === 0) {
+                            properties.select = properties.menus.main.length - 1;
+                        }
+
+                        for(var i = 0; i < properties.menus.main.length; i++) {
+                            properties.menus.main[i].attr('id', ' ');
+                        }  
+
+                        properties.menus.main[properties.select].attr('id', 'selected');
+
+                    } else if(pantallas.weepongDifficult.css('display') === 'block' ) {
+
+                        if (properties.select > 0) {
+                            properties.select -= 1;
+                        } else if (properties.select === 0) {
+                            properties.select = properties.menus.single.length - 1;
+                        }
+
+                        for(var i = 0; i < properties.menus.single.length; i++) {
+                            properties.menus.single[i].attr('id', ' ');
+                        }  
+
+                        properties.menus.single[properties.select].attr('id', 'selected');
+
+                    } else if(pantallas.weepongType.css('display') === 'block' ) {
+
+                        if (properties.select > 0) {
+                            properties.select -= 1;
+                        } else if (properties.select === 0) {
+                            properties.select = properties.menus.doble.length - 1;
+                        }
+
+                        for(var i = 0; i < properties.menus.doble.length; i++) {
+                            properties.menus.doble[i].attr('id', ' ');
+                        }  
+
+                        properties.menus.doble[properties.select].attr('id', 'selected');
+
+                    }  
+
+                } else {
+                    
+                    if (pong.mode === Modes.MATCH) {
+                        
+                        if(properties.players === 2) {
+                            keys2.unshift('up');
+                        } else if (properties.players === 1) {
+                            keys1.unshift('up');
+                        }
+
+                    } else if (pong.mode === Modes.PRACTICE) {
+                        keys1.unshift('up');
+                    }
+
+                }
+
+            }, null, function(){
+                
+                if (properties.menu === false) {
+
+                    if (pong.mode === Modes.MATCH) {
+                        
+                        if(properties.players === 2) {
+                            
+                            if(keys2.length > 0 && keys2[0] === 'up') {
+                                keys2.shift();
+                            } else if(keys2.length > 0 && keys2[1] === 'up') {
+                                keys2.pop();
+                            }
+
+                        } else if (properties.players === 1) {
+                            
+                            if(keys1.length > 0 && keys1[0] === 'up') {
+                                keys1.shift();
+                            } else if(keys1.length > 0 && keys1[1] === 'up') {
+                                keys1.pop();
+                            }
+
+                        }
+
+                    } else if (pong.mode === Modes.PRACTICE) {
+                        
+                        if(keys1.length > 0 && keys1[0] === 'up') {
+                            keys1.shift();
+                        } else if(keys1.length > 0 && keys1[1] === 'up') {
+                            keys1.pop();
+                        }
+
+                    }
+
+                }
+
+            }
+
+        )
+
+        .key('down', function(){
+                if (properties.menu) {
+                
+                    if(pantallas.weepongSelection.css('display') === 'block') {
+
+                        if (properties.select < properties.menus.main.length - 1) {
+                            properties.select += 1;
+                        } else if (properties.select === properties.menus.main.length - 1) {
+                            properties.select = 0;
+                        }
+
+                        for(var i = 0; i < properties.menus.main.length; i++) {
+                            properties.menus.main[i].attr('id', '');
+                        }  
+
+                        properties.menus.main[properties.select].attr('id', 'selected');
+
+                    } else if(pantallas.weepongDifficult.css('display') === 'block' ) {
+
+                        if (properties.select < properties.menus.single.length - 1) {
+                            properties.select += 1;
+                        } else if (properties.select === properties.menus.single.length - 1) {
+                            properties.select = 0;
+                        }
+
+                        for(var i = 0; i < properties.menus.single.length; i++) {
+                            properties.menus.single[i].attr('id', '');
+                        }  
+
+                        properties.menus.single[properties.select].attr('id', 'selected');
+
+                    } else if(pantallas.weepongType.css('display') === 'block' ) {
+
+                        if (properties.select < properties.menus.doble.length - 1) {
+                            properties.select += 1;
+                        } else if (properties.select === properties.menus.doble.length - 1) {
+                            properties.select = 0;
+                        }
+
+                        for(var i = 0; i < properties.menus.doble.length; i++) {
+                            properties.menus.doble[i].attr('id', '');
+                        }  
+
+                        properties.menus.doble[properties.select].attr('id', 'selected');
+
+                    }  
+
+                } else {            
+                    
+                    if (pong.mode === Modes.MATCH) {
+                        
+                        if(properties.players === 2) {
+                            keys2.unshift('down');
+                        } else if (properties.players === 1) {
+                            keys1.unshift('down');
+                        }
+
+                    } else if (pong.mode === Modes.PRACTICE) {
+                        keys1.unshift('down');
+                    }
+
+                }
+
+            }, null, function(){
+                
+                if(properties.menu === false) {            
+                    
+                    if (pong.mode === Modes.MATCH) {
+                        
+                        if(properties.players === 2) {
+                            if(keys2.length > 0 && keys2[0] === 'down') {
+                                keys2.shift();
+                            } else if(keys2.length > 0 && keys2[1] === 'down') {
+                                keys2.pop();
+                            }
+                        } else if (properties.players === 1) {
+                            if(keys1.length > 0 && keys1[0] === 'down') {
+                                keys1.shift();
+                            } else if(keys1.length > 0 && keys1[1] === 'down') {
+                                keys1.pop();
+                            }
+                        }
+                    
+                    } else if (pong.mode === Modes.PRACTICE) {
+                    
+                        if(keys1.length > 0 && keys1[0] === 'down') {
+                            keys1.shift();
+                        } else if(keys1.length > 0 && keys1[1] === 'down') {
+                            keys1.pop();
+                        }
+                    
+                    }
+
+                }
+
+            }
+        )
+
+        .key('enter', function() {
+
+            if(pantallas.weepongSelection.css('display') === 'block') {
+
+                for(var i = 0; i < properties.menus.main.length; i++) {
+                    properties.menus.main[i].attr('id', ' ');
+                }  
+
+                properties.menus.main[0].attr('id', 'selected');
+
+                if (properties.select === 0) {
+
+                    transiciones.toSinglePlayer();
+                     
+                    for(var i = 0; i < properties.menus.single.length; i++) {
+                        properties.menus.single[i].attr('id', ' ');
+                    } 
+
+                    properties.menus.single[0].attr('id', 'selected');
+                    properties.select = 0;
+
+                } else if (properties.select === 1) {
+
+                    transiciones.toMultiPlayer();                    
+
+                    for(var i = 0; i < properties.menus.doble.length; i++) {
+                        properties.menus.doble[i].attr('id', '');
+                    }  
+                    properties.menus.doble[0].attr('id', 'selected');
+                    properties.select = 0;
+
+                } else if (properties.select === 2) {
+
+                    properties.select = 0;
+                    transiciones.practiceMode();
+
+                } else if (properties.select === 3) {
+            
+                    properties.select = 0;
+                    transiciones.toInstructions();
+
+                }
+
+            } else if(pantallas.weepongDifficult.css('display') === 'block' ) {
+
+                for(var i = 0; i < properties.menus.single.length; i++) {
+                    
+                    properties.menus.single[i].attr('id', ' ');
+                }  
+
+                properties.menus.single[0].attr('id', 'selected');
+
+                if (properties.select === 0) {
+
+                    properties.select = 0;
+                    transiciones.easyMode();      
+
+                } else if (properties.select === 1) {
+
+                    properties.select = 0;
+                    transiciones.mediumMode();
+
+                } else if (properties.select === 2) {
+
+                    properties.select = 0;
+                    transiciones.hardMode();
+
+                } else if (properties.select === 3) {
+
+                    properties.select = 0;
+                    transiciones.impossibleMode();
+
+                }
+
+            } else if(pantallas.weepongType.css('display') === 'block' ) {
+
+                for(var i = 0; i < properties.menus.doble .length; i++) {
+                    properties.menus.doble[i].attr('id', '');
+                }  
+
+                properties.menus.doble[0].attr('id', 'selected');
+
+                if(properties.select === 0) {
+
+                    properties.select = 0;
+                    transiciones.normalMode();
+
+                } else if (properties.select === 1) {
+
+                    properties.select = 0;
+                    transiciones.awesomeMode();
+
+                }
+
+            } 
+
+        })
 
         .on('wz-resize', function() {
 
@@ -2780,9 +2700,59 @@
             }
         })  
 
-        .key('esc', _handler.escDown )
-        .key('w', _handler.wDown, null, _handler.wUp )
-        .key('s', _handler.sDown, null, _handler.sUp )
+        .key('esc', function(){
+
+            properties.select = 0;
+
+            if ( pong && pong.mode && pong.mode == Modes.PRACTICE && pong.highscore ) wql.setHigh( [ pong.highscore ], function ( err ) { if (err) console.log( err ) });
+            
+            if (pong != undefined) {
+                
+                pong.back();
+                pong = null;
+                properties.menu = true;
+                properties.paused = false;
+
+            } else {
+                
+                pauseText.css('display', 'none');
+                pantallas.weepongDifficult.css('display', 'none');
+                pantallas.weepongType.css('display', 'none');
+                pantallas.weepongInstructions.css('display', 'none');
+                pantallas.weepongSelection.css('display', 'block');
+                $('.weepong-title').css('display', 'block');
+                pantallas.weepongInstructions.css('display', 'none');   
+
+            }
+        })
+
+        .key('w', function(){
+
+            keys1.unshift('up');
+
+        }, null, function(){
+            
+            if(keys1.length > 0 && keys1[0] === 'up') {
+                keys1.shift();
+            } else if(keys1.length > 0 && keys1[1] === 'up') {
+                keys1.pop();
+            }
+
+        })
+
+        .key('s', function(){
+
+            keys1.unshift('down');
+
+        }, null, function(){
+            
+            if(keys1.length > 0 && keys1[0] === 'down') {
+                keys1.shift();
+            } else if(keys1.length > 0 && keys1[1] === 'down') {
+                keys1.pop();
+            }
+
+        })
 
         .key('ctrl + g', function(){
             
@@ -2866,77 +2836,4 @@
         properties.menus.doble[0].mouseover(function() { properties.select = 0; properties.menus.doble[properties.select].attr('id', 'selected'); })
         properties.menus.doble[1].mouseover(function() { properties.select = 1; properties.menus.doble[properties.select].attr('id', 'selected'); })
 
-    });
-
-    win
-    .on( 'remoteMessage', function( e, info, data ){
-
-        var eventType = data.eventType;
-
-        if ( eventType === 'keydown' ) {
-
-            if ( data.time > lastEvent ) {
-
-                if( data.value === 'w' ){
-                    _handler.wDown();
-                }else{
-                    _handler.sDown();
-                }
-
-                lastEvent = data.time;
-
-            }
-
-        }
-
-        if( eventType === 'keyup' ) {
-
-            if ( data.time > lastEvent ) {
-
-                if( data.value === 'w' ){
-                    _handler.wUp();
-                }else{
-                    _handler.sUp();
-                }
-
-                lastEvent = data.time;
-
-            }
-
-        }
-
-        if( eventType === 'trackpad' ){
-            
-            if ( data.time > lastEvent ) {
-
-                if( data.value === 'tap' ){
-                    _handler.enterDown();
-                }else if( data.value === 'swipeUp' ){
-
-                    _handler.upDown();
-                    _handler.upUp();
-
-                }else if( data.value === 'swipeDown' ){
-
-                    _handler.downDown();
-                    _handler.downUp();
-
-                }else if( data.value === 'swipeLeft' ){
-                    _handler.escDown();
-                }
-
-                lastEvent = data.time;
-
-            }
-
-        }
-
-    })
-
-    .on( 'wz-minimize', function(){
-        _handler.pDown();
-    })
-
-    .on( 'wz-unminimize', function(){
-        _handler.pDown();
     });
